@@ -9,9 +9,9 @@
                 <field name="leave_reason" required="1"/>
             </field>
 
-            <button name="action_draft" position="after">
-                <button name="send_email_with_pdf_attach" string="Mail Gönder" type="object"/>
-            </button>
+<!--            <button name="action_draft" position="after">-->
+<!--                <button name="send_email_with_pdf_attach" string="Mail Gönder" type="object"/>-->
+<!--            </button>-->
         </field>
     </record>
 </odoo>
