@@ -45,7 +45,7 @@
                                         <span t-esc="o.employee_id.job_title"/>
                                     </td>
                                     <td style="border: 1px solid black;border-collapse: collapse;padding: 10px;">
-                                      -
+                                      <span t-esc="o.employee_id.register_no"/>
                                     </td>
                                 </tr>
                             </table>
@@ -60,12 +60,12 @@
                                 </tr>
                                 <tr style="text-align: center;">
                                     <td style="border: 1px solid black;border-collapse: collapse;">
-                                        <strong>YILLIK İZİN ( <t t-if="o.holiday_status_id.requires_allocation=='yes'">X</t> )</strong>
-                                        <strong style="padding-left: 20%;">MAZERET ( <t t-if="o.holiday_status_id.requires_allocation=='no'">X</t> )</strong>
+                                        <strong>YILLIK İZİN ( <t t-if="o.holiday_status_id.leave_reason=='yillik'">X</t> )</strong>
+                                        <strong style="padding-left: 20%;">MAZERET ( <t t-if="o.holiday_status_id.leave_reason=='mazeret'">X</t> )</strong>
                                     </td>
                                     <td style="border: 1px solid black;border-collapse: collapse;padding: 10px;">
-                                        <strong>ÜCRETSİZ ( <t t-if="o.holiday_status_id.unpaid or o.holiday_status_id.timesheet_task_id.name=='Gecikme'">X</t> )</strong>
-                                        <strong style="padding-left: 20%;">ÜCRETLİ ( <t t-if="not o.holiday_status_id.unpaid==True and o.holiday_status_id.timesheet_task_id.name!='Gecikme'">X</t> )</strong>
+                                        <strong>ÜCRETSİZ ( <t t-if="not o.holiday_status_id.paid_leave">X</t> )</strong>
+                                        <strong style="padding-left: 20%;">ÜCRETLİ ( <t t-if="o.holiday_status_id.paid_leave">X</t> )</strong>
                                     </td>
                                 </tr>
                                 <tr style="text-align: center;">
