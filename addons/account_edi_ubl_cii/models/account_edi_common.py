@@ -3,7 +3,8 @@
 from odoo import _, models
 from odoo.tools import float_repr
 from odoo.tests.common import Form
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools.float_utils import float_round
 
 from zeep import Client
 
@@ -40,6 +41,7 @@ UOM_TO_UNECE_CODE = {
 # -------------------------------------------------------------------------
 COUNTRY_EAS = {
     'HU': 9910,
+    'AT': 9915,
     'ES': 9920,
     'AD': 9922,
     'AL': 9923,
@@ -51,7 +53,7 @@ COUNTRY_EAS = {
     'CZ': 9929,
     'DE': 9930,
     'EE': 9931,
-    'UK': 9932,
+    'GB': 9932,
     'GR': 9933,
     'HR': 9934,
     'IE': 9935,
@@ -78,6 +80,7 @@ COUNTRY_EAS = {
     'NO': '0192',
     'SG': '0195',
     'AU': '0151',
+    'FI': '0213',
 }
 
 
@@ -92,7 +95,7 @@ class AccountEdiCommon(models.AbstractModel):
     def format_float(self, amount, precision_digits):
         if amount is None:
             return None
-        return float_repr(amount, precision_digits)
+        return float_repr(float_round(amount, precision_digits), precision_digits)
 
     def _get_uom_unece_code(self, line):
         """
@@ -107,6 +110,16 @@ class AccountEdiCommon(models.AbstractModel):
     # -------------------------------------------------------------------------
     # TAXES
     # -------------------------------------------------------------------------
+
+    def _validate_taxes(self, invoice):
+        """ Validate the structure of the tax repartition lines (invalid structure could lead to unexpected results)
+        """
+        for tax in invoice.invoice_line_ids.tax_ids:
+            try:
+                tax._validate_repartition_lines()
+            except ValidationError as e:
+                error_msg = _("Tax '%s' is invalid: %s", tax.name, e.args[0])  # args[0] gives the error message
+                raise ValidationError(error_msg)
 
     def _get_tax_unece_codes(self, invoice, tax):
         """
@@ -304,6 +317,16 @@ class AccountEdiCommon(models.AbstractModel):
             invoice.with_context(no_new_invoice=True).message_post(attachment_ids=attachments.ids)
 
         return invoice
+
+    def _import_retrieve_and_fill_partner(self, invoice, name, phone, mail, vat):
+        """ Retrieve the partner, if no matching partner is found, create it
+        """
+        invoice.partner_id = self.env['account.edi.format']._retrieve_partner(name=name, phone=phone, mail=mail, vat=vat)
+        if not invoice.partner_id and name:
+            invoice.partner_id = self.env['res.partner'].create({'name': name, 'email': mail, 'phone': phone})
+            country_code = invoice.partner_id.commercial_partner_id.country_code
+            if vat and self.env['res.partner']._run_vat_test(vat, country_code, invoice.partner_id.is_company):
+                invoice.partner_id.vat = vat
 
     def _import_fill_invoice_allowance_charge(self, tree, invoice_form, journal, qty_factor):
         logs = []

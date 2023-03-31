@@ -590,7 +590,9 @@ class MrpProduction(models.Model):
         if not self.product_id:
             self.bom_id = False
         elif not self.bom_id or self.bom_id.product_tmpl_id != self.product_tmpl_id or (self.bom_id.product_id and self.bom_id.product_id != self.product_id):
-            bom = self.env['mrp.bom']._bom_find(self.product_id, picking_type=self.picking_type_id, company_id=self.company_id.id, bom_type='normal')[self.product_id]
+            picking_type_id = self._context.get('default_picking_type_id')
+            picking_type = picking_type_id and self.env['stock.picking.type'].browse(picking_type_id)
+            bom = self.env['mrp.bom']._bom_find(self.product_id, picking_type=picking_type, company_id=self.company_id.id, bom_type='normal')[self.product_id]
             if bom:
                 self.bom_id = bom.id
                 self.product_qty = self.bom_id.product_qty
@@ -618,7 +620,9 @@ class MrpProduction(models.Model):
         self.product_uom_id = self.bom_id and self.bom_id.product_uom_id.id or self.product_id.uom_id.id
         self.move_raw_ids = [(2, move.id) for move in self.move_raw_ids.filtered(lambda m: m.bom_line_id)]
         self.move_finished_ids = [(2, move.id) for move in self.move_finished_ids]
-        self.picking_type_id = self.bom_id.picking_type_id or self.picking_type_id
+        picking_type_id = self._context.get('default_picking_type_id')
+        picking_type = picking_type_id and self.env['stock.picking.type'].browse(picking_type_id)
+        self.picking_type_id = picking_type or self.bom_id.picking_type_id or self.picking_type_id
 
     @api.onchange('date_planned_start', 'product_id')
     def _onchange_date_planned_start(self):
@@ -1552,8 +1556,19 @@ class MrpProduction(models.Model):
 
         # As we have split the moves before validating them, we need to 'remove' the excess reservation
         if not close_mo:
-            self.move_raw_ids.filtered(lambda m: not m.additional)._do_unreserve()
-            self.move_raw_ids.filtered(lambda m: not m.additional)._action_assign()
+            raw_moves = self.move_raw_ids.filtered(lambda m: not m.additional)
+            raw_moves._do_unreserve()
+            for sml in raw_moves.move_line_ids:
+                try:
+                    q = self.env['stock.quant']._update_reserved_quantity(sml.product_id, sml.location_id, sml.qty_done,
+                                                                          lot_id=sml.lot_id, package_id=sml.package_id,
+                                                                          owner_id=sml.owner_id, strict=True)
+                    reserved_qty = sum([x[1] for x in q])
+                    reserved_qty = sml.product_id.uom_id._compute_quantity(reserved_qty, sml.product_uom_id)
+                except UserError:
+                    reserved_qty = 0
+                sml.with_context(bypass_reservation_update=True).product_uom_qty = reserved_qty
+            raw_moves._recompute_state()
         backorders.action_confirm()
         bo_to_assign.action_assign()
 
@@ -1601,9 +1616,10 @@ class MrpProduction(models.Model):
                 amounts[production] = _default_amounts(production)
                 continue
             total_amount = sum(mo_amounts)
-            if total_amount < production.product_qty and not cancel_remaning_qty:
+            diff = float_compare(production.product_qty, total_amount, precision_rounding=production.product_uom_id.rounding)
+            if diff > 0 and not cancel_remaning_qty:
                 amounts[production].append(production.product_qty - total_amount)
-            elif total_amount > production.product_qty or production.state in ['done', 'cancel']:
+            elif diff < 0 or production.state in ['done', 'cancel']:
                 raise UserError(_("Unable to split with more than the quantity to produce."))
 
         backorder_vals_list = []

@@ -260,13 +260,25 @@ class Website(models.Model):
                 vals['domain'] = 'https://%s' % vals['domain']
             vals['domain'] = vals['domain'].rstrip('/')
 
+    # TODO: rename in master
     @api.ondelete(at_uninstall=False)
     def _unlink_except_last_remaining_website(self):
         website = self.search([('id', 'not in', self.ids)], limit=1)
         if not website:
             raise UserError(_('You must keep at least one website.'))
+        default_website = self.env.ref('website.default_website', raise_if_not_found=False)
+        if default_website and default_website in self:
+            raise UserError(_("You cannot delete default website %s. Try to change its settings instead", default_website.name))
 
     def unlink(self):
+        self._remove_attachments_on_website_unlink()
+
+        companies = self.company_id
+        res = super().unlink()
+        companies._compute_website_id()
+        return res
+
+    def _remove_attachments_on_website_unlink(self):
         # Do not delete invoices, delete what's strictly necessary
         attachments_to_unlink = self.env['ir.attachment'].search([
             ('website_id', 'in', self.ids),
@@ -276,10 +288,6 @@ class Website(models.Model):
             ('url', 'ilike', '.assets\\_'),
         ])
         attachments_to_unlink.unlink()
-        companies = self.company_id
-        res = super(Website, self).unlink()
-        companies._compute_website_id()
-        return res
 
     def create_and_redirect_configurator(self):
         self._force()
@@ -1236,6 +1244,9 @@ class Website(models.Model):
             domain = []
         domain += self.get_current_website().website_domain()
         pages = self.env['website.page'].sudo().search(domain, order=order, limit=limit)
+        # TODO In 16.0 remove condition on _filter_duplicate_pages.
+        if self.env.context.get('_filter_duplicate_pages'):
+            pages = pages._get_most_specific_pages()
         return pages
 
     def search_pages(self, needle=None, limit=None):

@@ -1031,22 +1031,6 @@ class WebClient(http.Controller):
         return request.render('web.benchmark_suite')
 
 
-class Proxy(http.Controller):
-
-    @http.route('/web/proxy/post/<path:path>', type='http', auth='user', methods=['GET'])
-    def post(self, path):
-        """Effectively execute a POST request that was hooked through user login"""
-        with request.session.load_request_data() as data:
-            if not data:
-                raise werkzeug.exceptions.BadRequest()
-            from werkzeug.test import Client
-            base_url = request.httprequest.base_url
-            query_string = request.httprequest.query_string
-            client = Client(http.root, werkzeug.wrappers.Response)
-            headers = {'X-Openerp-Session-Id': request.session.sid}
-            return client.post('/' + path, base_url=base_url, query_string=query_string,
-                               headers=headers, data=data)
-
 class Database(http.Controller):
 
     def _render_template(self, **d):
@@ -1408,10 +1392,11 @@ class Binary(http.Controller):
         '/web/assets/<int:id>-<string:unique>/<string:filename>',
         '/web/assets/<int:id>-<string:unique>/<path:extra>/<string:filename>'], type='http', auth="public")
     def content_assets(self, id=None, filename=None, unique=None, extra=None, **kw):
+        domain = [('url', '!=', False)]
         if extra:
-            domain = [('url', '=like', f'/web/assets/%/{extra}/{filename}')]
+            domain += [('url', '=like', f'/web/assets/%/{extra}/{filename}')]
         else:
-            domain = [
+            domain += [
                 ('url', '=like', f'/web/assets/%/{filename}'),
                 ('url', 'not like', f'/web/assets/%/%/{filename}')
             ]
@@ -1812,7 +1797,7 @@ class ExportFormat(object):
         model, fields, ids, domain, import_compat = \
             operator.itemgetter('model', 'fields', 'ids', 'domain', 'import_compat')(params)
 
-        Model = request.env[model].with_context(**params.get('context', {}))
+        Model = request.env[model].with_context(import_compat=import_compat, **params.get('context', {}))
         if not Model._is_an_ordinary_table():
             fields = [field for field in fields if field['name'] != 'id']
 
@@ -1836,7 +1821,6 @@ class ExportFormat(object):
 
             response_data = self.from_group_data(fields, tree)
         else:
-            Model = Model.with_context(import_compat=import_compat)
             records = Model.browse(ids) if ids else Model.search(domain, offset=0, limit=False, order=False)
 
             export_data = records.export_data(field_names).get('datas',[])
@@ -2045,11 +2029,7 @@ class ReportController(http.Controller):
                 'message': "Odoo Server Error",
                 'data': se
             }
-            res = werkzeug.wrappers.Response(
-                json.dumps(error),
-                status=500,
-                headers=[("Content-Type", "application/json")]
-            )
+            res = request.make_response(html_escape(json.dumps(error)))
             raise werkzeug.exceptions.InternalServerError(response=res) from e
 
     @http.route(['/report/check_wkhtmltopdf'], type='json', auth="user")
