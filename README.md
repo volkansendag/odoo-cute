@@ -23,7 +23,7 @@ The main Odoo Apps include an <a href="https://www.odoo.com/page/crm">Open Sourc
 Odoo Apps can be used as stand-alone applications, but they also integrate seamlessly so you get
 a full-featured <a href="https://www.odoo.com">Open Source ERP</a> when you install several Apps.
 
-Getting started with Odoo
+Odoo'ya başlarken
 -------------------------
 
 For a standard installation please follow the <a href="https://www.odoo.com/documentation/15.0/administration/install.html">Setup instructions</a>

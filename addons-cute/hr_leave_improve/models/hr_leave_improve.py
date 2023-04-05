@@ -10,8 +10,6 @@ import base64
 class HolidaysRequest(models.Model):
     _inherit = "hr.leave"
 
-    leave_reason = fields.Selection([('yillik', 'Yıllık İzin'), ('mazeret', 'Mazeret İzni')], string='İzin Sebebi', default='yillik')
-
     def action_send_email(self):
         print(self)
 

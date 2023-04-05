@@ -66,8 +66,6 @@ class SaleOrderLine(models.Model):
                 'price_total': taxes['total_included'],
                 'price_subtotal': taxes['total_excluded'],
             })
-            if self.env.context.get('import_file', False) and not self.env.user.user_has_groups('account.group_account_manager'):
-                line.tax_id.invalidate_cache(['invoice_repartition_line_ids'], [line.tax_id.id])
 
     @api.depends('product_id', 'order_id.state', 'qty_invoiced', 'qty_delivered')
     def _compute_product_updatable(self):
@@ -243,7 +241,7 @@ class SaleOrderLine(models.Model):
     price_total = fields.Monetary(compute='_compute_amount', string='Total', store=True)
 
     price_reduce = fields.Float(compute='_compute_price_reduce', string='Price Reduce', digits='Product Price', store=True)
-    tax_id = fields.Many2many('account.tax', string='Taxes', context={'active_test': False})
+    tax_id = fields.Many2many('account.tax', string='Taxes', context={'active_test': False}, check_company=True)
     price_reduce_taxinc = fields.Monetary(compute='_compute_price_reduce_taxinc', string='Price Reduce Tax inc', store=True)
     price_reduce_taxexcl = fields.Monetary(compute='_compute_price_reduce_taxexcl', string='Price Reduce Tax excl', store=True)
 
@@ -530,6 +528,9 @@ class SaleOrderLine(models.Model):
                     company_id=line.company_id.id,
                 )
                 line.analytic_tag_ids = default_analytic_account.analytic_tag_ids
+
+    def compute_uom_qty(self, new_qty, stock_move, rounding=True):
+        return self.product_uom._compute_quantity(new_qty, stock_move.product_uom, rounding)
 
     def _get_invoice_line_sequence(self, new=0, old=0):
         """

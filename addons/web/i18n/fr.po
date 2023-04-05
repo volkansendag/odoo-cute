@@ -11,6 +11,7 @@
 # Martin Trigaux, 2022
 # Xavier Belmere <Info@cartmeleon.com>, 2022
 # Cécile Collart <cco@odoo.com>, 2022
+# Moka Tourisme <hello@mokatourisme.fr>, 2023
 # Jolien De Paepe, 2023
 # 
 msgid ""
@@ -1989,7 +1990,7 @@ msgstr "Filtres"
 #: code:addons/web/static/src/views/pivot/pivot_view.xml:0
 #, python-format
 msgid "Flip axis"
-msgstr "Intervertir les axes"
+msgstr "Inverser les axes"
 
 #. module: web
 #. openerp-web
@@ -3566,14 +3567,14 @@ msgstr "Champ Qweb image"
 #: code:addons/web/static/src/legacy/xml/colorpicker.xml:0
 #, python-format
 msgid "RGB"
-msgstr "RGB"
+msgstr "RVB"
 
 #. module: web
 #. openerp-web
 #: code:addons/web/static/src/legacy/xml/colorpicker.xml:0
 #, python-format
 msgid "RGBA"
-msgstr "RGBA"
+msgstr "RVBA"
 
 #. module: web
 #. openerp-web

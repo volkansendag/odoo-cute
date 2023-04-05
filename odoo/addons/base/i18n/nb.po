@@ -7403,6 +7403,8 @@ msgid ""
 "A partner with the same <span><span class=\"o_vat_label\">Tax "
 "ID</span></span> already exists ("
 msgstr ""
+"En kontakt med den samme <span><span class=\"o_vat_label\">Skatt ID "
+"</span></span> finnes allerede ("
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_base_partner_merge_automatic_wizard__exclude_contact
@@ -9047,7 +9049,7 @@ msgstr ""
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_mail_server__smtp_authentication
 msgid "Authenticate with"
-msgstr ""
+msgstr "Autentiser med"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_auth_ldap
@@ -9955,7 +9957,7 @@ msgstr "Bygg fine tilbudsmaler"
 #. module: base
 #: model:ir.module.module,summary:base.module_board
 msgid "Build your own dashboards"
-msgstr ""
+msgstr "Sett opp ditt eget arbeidsbord"
 
 #. module: base
 #: model:res.country,name:base.bg
@@ -10068,7 +10070,7 @@ msgstr "Kalender"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_calendar_sms
 msgid "Calendar - SMS"
-msgstr ""
+msgstr "Kalender - SMS"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_cron_trigger__call_at
@@ -10765,7 +10767,7 @@ msgstr "Firmanavn"
 #: model:ir.model.fields,field_description:base.field_res_partner__commercial_company_name
 #: model:ir.model.fields,field_description:base.field_res_users__commercial_company_name
 msgid "Company Name Entity"
-msgstr ""
+msgstr "Komplett firma navn"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_partner_form
@@ -10966,7 +10968,7 @@ msgstr "Kongo"
 #. module: base
 #: model:ir.module.module,summary:base.module_pos_restaurant_iot
 msgid "Connect kitchen printers to your PoS"
-msgstr ""
+msgstr "Koble kjøkken printer til din Kasse"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_hw_drivers
@@ -11944,12 +11946,12 @@ msgstr "Dashbord"
 #: model:ir.module.category,name:base.module_category_productivity_data_cleaning
 #: model:ir.module.module,shortdesc:base.module_data_cleaning
 msgid "Data Cleaning"
-msgstr ""
+msgstr "Data opprydding"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_data_merge
 msgid "Data Cleaning (merge)"
-msgstr ""
+msgstr "Data opprydding (slå sammen)"
 
 #. module: base
 #: model:ir.module.module,description:base.module_test_convert
@@ -12174,6 +12176,8 @@ msgid ""
 "Define for which email address or domain this server can be used.\n"
 "e.g.: \"notification@odoo.com\" or \"odoo.com\""
 msgstr ""
+"Definer hvilken e-postadresse eller domene denne serveren kan brukes til.\n"
+"f.eks.: \"post@odoo.com\" eller \"odoo.com\""
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.module_form
@@ -12718,7 +12722,7 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_documents_sign
 msgid "Documents - Signatures"
-msgstr ""
+msgstr "Dokumenter - Signaturer"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_documents_hr_holidays
@@ -15308,7 +15312,7 @@ msgstr ""
 #. module: base
 #: model:ir.module.category,description:base.module_category_sales_sign
 msgid "Helps you sign and complete your documents easily."
-msgstr ""
+msgstr "Hjelper deg enkelt å signere og fullføre dokumentene dine."
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.wizard_lang_export
@@ -16093,7 +16097,7 @@ msgstr ""
 #. module: base
 #: model:ir.actions.act_window,name:base.res_partner_industry_action
 msgid "Industries"
-msgstr ""
+msgstr "Bransjer"
 
 #. module: base
 #: model:ir.model,name:base.model_res_partner_industry
@@ -20995,12 +20999,12 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,summary:base.module_project
 msgid "Organize and plan your projects"
-msgstr ""
+msgstr "Organiser og planlegg dine prosjekter"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_note
 msgid "Organize your work with memos"
-msgstr ""
+msgstr "Organiser ditt arbeid med notater"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_report_paperformat__orientation
@@ -21096,7 +21100,7 @@ msgstr "Utgående e-postservere"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_microsoft_calendar
 msgid "Outlook Calendar"
-msgstr ""
+msgstr "Outlook kalender"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_report_paperformat__dpi
@@ -21372,7 +21376,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:base.field_res_partner__same_vat_partner_id
 #: model:ir.model.fields,field_description:base.field_res_users__same_vat_partner_id
 msgid "Partner with same Tax ID"
-msgstr ""
+msgstr "Kontakt med den samme skatte ID"
 
 #. module: base
 #: model:ir.model.fields,help:base.field_res_users__partner_id
@@ -25275,7 +25279,7 @@ msgstr "Test tilkobling"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_test_data_cleaning
 msgid "Test Data Cleaning"
-msgstr ""
+msgstr "Test Data opprydding"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_test_discuss_full
@@ -25320,7 +25324,7 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,summary:base.module_test_data_cleaning
 msgid "Test Suite for Data Cleaning"
-msgstr ""
+msgstr "Test område for Data opprydding"
 
 #. module: base
 #: model:ir.module.module,description:base.module_test_data_module_install

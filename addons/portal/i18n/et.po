@@ -15,7 +15,8 @@
 # Triine Aavik <triine@avalah.ee>, 2022
 # Eneli Õigus <enelioigus@gmail.com>, 2022
 # Martin Aavastik <martin@avalah.ee>, 2022
-# Jana Jaakson, 2022
+# Leaanika Randmets, 2023
+# Jana Jaakson, 2023
 # Anna, 2023
 # 
 msgid ""
@@ -37,7 +38,7 @@ msgstr ""
 #: code:addons/portal/static/src/js/portal_sidebar.js:0
 #, python-format
 msgid "%1d days overdue"
-msgstr ""
+msgstr "%1d päev üle tähtaja"
 
 #. module: portal
 #: code:addons/portal/controllers/portal.py:0
@@ -56,11 +57,13 @@ msgid ""
 "<i class=\"fa fa-chevron-left\" role=\"img\" aria-label=\"Previous\" "
 "title=\"Previous\"/>"
 msgstr ""
+"<i class=\"fa fa-chevron-left\" role=\"img\" aria-label=\"Previous\" "
+"title=\"Previous\"/>"
 
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.record_pager
 msgid "<i class=\"fa fa-chevron-right\" role=\"img\" aria-label=\"Next\" title=\"Next\"/>"
-msgstr ""
+msgstr "<i class=\"fa fa-chevron-right\" role=\"img\" aria-label=\"Next\" title=\"Next\"/>"
 
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.portal_layout
@@ -193,14 +196,14 @@ msgstr ""
 #: code:addons/portal/static/src/js/portal.js:0
 #, python-format
 msgid "API Key Ready"
-msgstr ""
+msgstr "API võti valmis"
 
 #. module: portal
 #. openerp-web
 #: code:addons/portal/static/src/js/portal_signature.js:0
 #, python-format
 msgid "Accept & Sign"
-msgstr ""
+msgstr "Kinnita & Allkirjasta"
 
 #. module: portal
 #: model:ir.model.fields,field_description:portal.field_portal_mixin__access_warning
@@ -292,7 +295,7 @@ msgstr ""
 #: code:addons/portal/static/src/js/portal.js:0
 #, python-format
 msgid "Check failed"
-msgstr ""
+msgstr "Kontroll ebaõnnestus"
 
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.portal_my_details
@@ -369,7 +372,7 @@ msgstr "Kontaktid"
 #: code:addons/portal/static/src/js/portal_composer.js:0
 #, python-format
 msgid "Could not save file <strong>%s</strong>"
-msgstr ""
+msgstr "Faili ei saanud salvestada <strong>%s</strong>"
 
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.portal_my_details
@@ -403,6 +406,8 @@ msgid ""
 "Currently available to everyone viewing this document, click to restrict to "
 "internal employees."
 msgstr ""
+"Praegu saadaval kõigile, kes seda dokumenti vaatavad. Klõpsake, et piirata "
+"õigusi ainult sisemistele töötajatele."
 
 #. module: portal
 #. openerp-web
@@ -412,11 +417,13 @@ msgid ""
 "Currently restricted to internal employees, click to make it available to "
 "everyone viewing this document."
 msgstr ""
+"Praegu on see mõeldud ainult sisetöötajatele. Klõpsake, et muuta see "
+"kättesaadavaks kõigile, kes seda dokumenti vaatavad."
 
 #. module: portal
 #: model:ir.model.fields,field_description:portal.field_res_config_settings__portal_allow_api_keys
 msgid "Customer API Keys"
-msgstr ""
+msgstr "Kliendi API võtmed"
 
 #. module: portal
 #: model:ir.model.fields,help:portal.field_portal_mixin__access_url
@@ -475,14 +482,14 @@ msgstr "Dokumendid"
 #: code:addons/portal/static/src/js/portal_sidebar.js:0
 #, python-format
 msgid "Due in %1d days"
-msgstr ""
+msgstr "Tähtaeg %1d päeva pärast"
 
 #. module: portal
 #. openerp-web
 #: code:addons/portal/static/src/js/portal_sidebar.js:0
 #, python-format
 msgid "Due today"
-msgstr ""
+msgstr "tänaseni"
 
 #. module: portal
 #: model:ir.model.fields,field_description:portal.field_portal_wizard_user__email
@@ -563,7 +570,7 @@ msgstr "ID"
 #: code:addons/portal/static/src/xml/portal_security.xml:0
 #, python-format
 msgid "Important:"
-msgstr ""
+msgstr "Tähtis:"
 
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.wizard_view
@@ -594,7 +601,7 @@ msgstr "E-posti aadress ei ole korrektne! Palun kirjuta korrektne e-post."
 #: code:addons/portal/controllers/portal.py:0
 #, python-format
 msgid "Invalid report type: %s"
-msgstr ""
+msgstr "Vigane aruande tüüp: %s"
 
 #. module: portal
 #: model:ir.model.fields,field_description:portal.field_portal_wizard__welcome_message
@@ -604,12 +611,12 @@ msgstr "Kutse sõnum"
 #. module: portal
 #: model:ir.model.fields,field_description:portal.field_portal_wizard_user__is_internal
 msgid "Is Internal"
-msgstr ""
+msgstr "on sisemine"
 
 #. module: portal
 #: model:ir.model.fields,field_description:portal.field_portal_wizard_user__is_portal
 msgid "Is Portal"
-msgstr ""
+msgstr "on portaal"
 
 #. module: portal
 #. openerp-web
@@ -619,6 +626,8 @@ msgid ""
 "It is very important that this description be clear\n"
 "                and complete,"
 msgstr ""
+"On väga oluline, et see kirjeldus on selge\n"
+"ja täielik,"
 
 #. module: portal
 #: model:ir.model.fields,field_description:portal.field_portal_share____last_update
@@ -644,7 +653,7 @@ msgstr "Viimati uuendatud"
 #. module: portal
 #: model:ir.model.fields,field_description:portal.field_portal_wizard_user__login_date
 msgid "Latest Authentication"
-msgstr ""
+msgstr "Viimane autentimine"
 
 #. module: portal
 #. openerp-web
@@ -656,7 +665,7 @@ msgstr "Jäta kommentaar"
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.res_config_settings_view_form
 msgid "Let your customers create developer API keys"
-msgstr ""
+msgstr "Lase klientidel luua arendaja API võtmeid"
 
 #. module: portal
 #: model:ir.model.fields,field_description:portal.field_portal_share__share_link
@@ -709,7 +718,7 @@ msgstr "Uus API võti"
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.portal_my_security
 msgid "New Password:"
-msgstr ""
+msgstr "Uus salasõna:"
 
 #. module: portal
 #. openerp-web
@@ -753,12 +762,12 @@ msgstr "Partnerid"
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.portal_my_security
 msgid "Password Updated!"
-msgstr ""
+msgstr "Salasõna on uuendatud!"
 
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.portal_my_security
 msgid "Password:"
-msgstr ""
+msgstr "Salasõna:"
 
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.portal_my_details
@@ -770,14 +779,14 @@ msgstr "Telefon"
 #: code:addons/portal/static/src/xml/portal_security.xml:0
 #, python-format
 msgid "Please enter your password to confirm you own this account"
-msgstr ""
+msgstr "Palun sisestage enda salasõna, et jätkata"
 
 #. module: portal
 #: code:addons/portal/wizard/portal_wizard.py:0
 #: model_terms:ir.ui.view,arch_db:portal.wizard_view
 #, python-format
 msgid "Portal Access Management"
-msgstr ""
+msgstr "Portaali ligipääsu haldus"
 
 #. module: portal
 #: model:ir.model.fields,field_description:portal.field_portal_mixin__access_url
@@ -787,12 +796,12 @@ msgstr "Portaali ligipääsu URL"
 #. module: portal
 #: model:ir.model,name:portal.model_portal_mixin
 msgid "Portal Mixin"
-msgstr ""
+msgstr "Portaali Mixin"
 
 #. module: portal
 #: model:ir.model,name:portal.model_portal_share
 msgid "Portal Sharing"
-msgstr ""
+msgstr "Portaali jagamine"
 
 #. module: portal
 #: model:ir.model,name:portal.model_portal_wizard_user
@@ -802,7 +811,7 @@ msgstr "Portaali kasutaja seadistused"
 #. module: portal
 #: model:mail.template,name:portal.mail_template_data_portal_welcome
 msgid "Portal: User Invite"
-msgstr ""
+msgstr "Portaal: Kutsu kasutaja"
 
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.portal_record_sidebar
@@ -832,7 +841,7 @@ msgstr "Saadetud %s"
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.wizard_view
 msgid "Re-Invite"
-msgstr ""
+msgstr "Kutsu uuesti"
 
 #. module: portal
 #: model:ir.model.fields,field_description:portal.field_portal_share__partner_ids
@@ -857,7 +866,7 @@ msgstr "Seotud dokumendi mudel"
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.wizard_view
 msgid "Revoke Access"
-msgstr ""
+msgstr "Tühista ligipääs"
 
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.portal_my_security
@@ -1050,7 +1059,7 @@ msgstr "Hetkel sõnumid puuduvad."
 #: code:addons/portal/controllers/portal.py:0
 #, python-format
 msgid "This document does not exist."
-msgstr ""
+msgstr "Antud dokument ei eksisteeri. "
 
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.portal_back_in_edit_mode
@@ -1099,7 +1108,7 @@ msgstr "KMKR nr"
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.portal_my_security
 msgid "Verify New Password:"
-msgstr ""
+msgstr "Uue salasõna kordus:"
 
 #. module: portal
 #: model:ir.model,name:portal.model_ir_ui_view
@@ -1243,7 +1252,7 @@ msgstr ""
 #. module: portal
 #: model:mail.template,subject:portal.mail_template_data_portal_welcome
 msgid "Your account at {{ object.user_id.company_id.name }}"
-msgstr ""
+msgstr "Teie konto {{ object.user_id.company_id.name }}"
 
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.portal_contact
@@ -1281,7 +1290,7 @@ msgstr "kommentaarid"
 #: code:addons/portal/static/src/xml/portal_security.xml:0
 #, python-format
 msgid "full access"
-msgstr ""
+msgstr "täielik juurdepääs"
 
 #. module: portal
 #. openerp-web
@@ -1302,7 +1311,7 @@ msgstr "sisse logitud"
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.portal_record_sidebar
 msgid "odoo"
-msgstr ""
+msgstr "odoo"
 
 #. module: portal
 #: model_terms:ir.ui.view,arch_db:portal.portal_my_security

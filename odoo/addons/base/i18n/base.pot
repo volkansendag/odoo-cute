@@ -11133,6 +11133,12 @@ msgid "Country Name"
 msgstr ""
 
 #. module: base
+#: code:addons/base/models/res_country.py:0
+#, python-format
+msgid "Country code cannot be empty"
+msgstr ""
+
+#. module: base
 #: model:ir.model,name:base.model_res_country_state
 msgid "Country state"
 msgstr ""
@@ -25303,6 +25309,14 @@ msgid ""
 msgstr ""
 
 #. module: base
+#: code:addons/base/models/res_currency.py:0
+#, python-format
+msgid ""
+"The name for the current rate is empty.\n"
+"Please set it."
+msgstr ""
+
+#. module: base
 #: model:ir.model.constraint,message:base.constraint_res_country_code_uniq
 msgid "The code of the country must be unique !"
 msgstr ""
@@ -28999,4 +29013,10 @@ msgstr ""
 #. module: base
 #: model:res.country,name:base.ax
 msgid "Åland Islands"
+msgstr ""
+
+#. module: base
+#: code:addons/base/models/res_currency.py:0
+#, python-format
+msgid "This currency is set on a company and therefore cannot be deactivated."
 msgstr ""

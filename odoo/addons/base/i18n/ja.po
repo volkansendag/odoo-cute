@@ -12,7 +12,7 @@
 # Noma Yuki, 2022
 # Yoshi Tashiro (Quartile) <tashiro@roomsfor.hk>, 2022
 # 江口和志 <sandwhale1010@gmail.com>, 2022
-# Ryoko Tsuda <ryoko@quartile.co>, 2022
+# Ryoko Tsuda <ryoko@quartile.co>, 2023
 # Andy Yiu, 2023
 # 
 msgid ""
@@ -9257,7 +9257,7 @@ msgstr "9. %w ==&gt; 5 (金曜日は6日目)"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_partner_form
 msgid "<b attrs=\"{'invisible': [('is_company', '=', False)]}\">Address</b>"
-msgstr ""
+msgstr "<b attrs=\"{'invisible': [('is_company', '=', False)]}\">住所</b>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_server_action_form
@@ -11860,7 +11860,7 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_barcodes_gs1_nomenclature
 msgid "Barcode - GS1 Nomenclature"
-msgstr ""
+msgstr "バーコード - GS1 表現規則"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_stock_barcode_quality_control
@@ -13189,7 +13189,7 @@ msgstr "取引先"
 #. module: base
 #: model:ir.module.category,name:base.module_category_sales_commissions
 msgid "Commissions"
-msgstr ""
+msgstr "手数料"
 
 #. module: base
 #: model:res.country,name:base.km
@@ -13276,7 +13276,7 @@ msgstr "会社名エントリー"
 #: model_terms:ir.ui.view,arch_db:base.view_partner_form
 #: model_terms:ir.ui.view,arch_db:base.view_partner_simple_form
 msgid "Company Name..."
-msgstr ""
+msgstr "会社名..."
 
 #. module: base
 #: model:ir.actions.act_window,name:base.ir_property_form
@@ -13873,7 +13873,7 @@ msgstr ""
 #. module: base
 #: model_terms:ir.actions.act_window,help:base.action_partner_form
 msgid "Create a Contact in your address book"
-msgstr ""
+msgstr "アドレス帳に連絡先を作成"
 
 #. module: base
 #: model_terms:ir.actions.act_window,help:base.action_country_group
@@ -23112,7 +23112,7 @@ msgstr "仕入先に関係するあらゆる活動を追跡することができ
 #. module: base
 #: model_terms:ir.actions.act_window,help:base.action_partner_form
 msgid "Odoo helps you track all activities related to your contacts."
-msgstr ""
+msgstr "Odooは、連絡先関連の全ての活動を追跡いたします。"
 
 #. module: base
 #: code:addons/base/models/ir_module.py:0
@@ -24570,7 +24570,7 @@ msgstr "順序のためのレコードのプレフィックス値"
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_asset__directive__prepend
 msgid "Prepend"
-msgstr ""
+msgstr "Prepend"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_website_twitter_wall
@@ -31541,7 +31541,7 @@ msgstr "例 BE0477472701"
 #: model_terms:ir.ui.view,arch_db:base.view_partner_form
 #: model_terms:ir.ui.view,arch_db:base.view_partner_simple_form
 msgid "e.g. Brandom Freeman"
-msgstr ""
+msgstr "例: Brandom Freeman"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_base_import_language
@@ -31568,7 +31568,7 @@ msgstr "例: 鈴木 一郎"
 #: model_terms:ir.ui.view,arch_db:base.view_partner_form
 #: model_terms:ir.ui.view,arch_db:base.view_partner_simple_form
 msgid "e.g. Lumber Inc"
-msgstr ""
+msgstr "例: Lumber Inc"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_partner_form

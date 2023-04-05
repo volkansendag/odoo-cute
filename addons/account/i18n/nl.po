@@ -5,7 +5,7 @@
 # Translators:
 # Odoo Experts Consultants <consultants@odooexperts.nl>, 2021
 # Martin Trigaux, 2022
-# Erwin van der Ploeg <erwin@odooexperts.nl>, 2022
+# Erwin van der Ploeg <erwin@odooexperts.nl>, 2023
 # Jolien De Paepe, 2023
 # 
 msgid ""
@@ -528,8 +528,8 @@ msgid ""
 msgstr ""
 "<span attrs=\"{'invisible': ['|',('reconciled_invoices_type','!=','invoice'),('reconciled_invoices_count','&gt;', 1)]}\">Factuur</span>\n"
 "                                 <span attrs=\"{'invisible': ['|',('reconciled_invoices_type','!=','invoice'),('reconciled_invoices_count','&lt;=', 1)]}\">Facturen</span>\n"
-"                                 <span attrs=\"{'invisible': ['|',('reconciled_invoices_type','=','invoice'),('reconciled_invoices_count','&gt;', 1)]}\">Kredietnota</span>\n"
-"                                 <span attrs=\"{'invisible': ['|',('reconciled_invoices_type','=','invoice'),('reconciled_invoices_count','&lt;=', 1)]}\">Kredietnota's</span>"
+"                                 <span attrs=\"{'invisible': ['|',('reconciled_invoices_type','=','invoice'),('reconciled_invoices_count','&gt;', 1)]}\">Creditfactuur</span>\n"
+"                                 <span attrs=\"{'invisible': ['|',('reconciled_invoices_type','=','invoice'),('reconciled_invoices_count','&lt;=', 1)]}\">Creditfacturen</span>"
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.account_invoice_send_wizard_form
@@ -1924,7 +1924,7 @@ msgstr "Actief"
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_account_search
 msgid "Active Account"
-msgstr "Active rekening"
+msgstr "Actieve rekening"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_invoice_send__active_domain
@@ -4836,6 +4836,7 @@ msgid "Customer Invoice"
 msgstr "Verkoopfactuur"
 
 #. module: account
+#: code:addons/account/models/account_analytic_line.py:0
 #: code:addons/account/models/chart_template.py:0
 #: model_terms:ir.ui.view,arch_db:account.account_analytic_account_view_form_inherit
 #: model_terms:ir.ui.view,arch_db:account.res_config_settings_view_form
@@ -14744,6 +14745,16 @@ msgid "There was an error processing this page."
 msgstr "Er was een fout met het verwerken van deze pagina."
 
 #. module: account
+#: code:addons/account/models/ir_actions_report.py:0
+#, python-format
+msgid ""
+"There was an error when trying to add the banner to the original PDF.\n"
+"Please make sure the source file is valid."
+msgstr ""
+"Er is een fout opgetreden bij het toevoegen van de banner aan de originele pdf.\n"
+"Zorg ervoor dat het bronbestand geldig is."
+
+#. module: account
 #: model_terms:ir.ui.view,arch_db:account.res_config_settings_view_form
 msgid "These taxes are set in any new product created."
 msgstr "Deze BTW worden ingesteld in elk nieuw aangemaakt product."
@@ -15428,6 +15439,12 @@ msgid "Unposted"
 msgstr "Ongeboekt"
 
 #. module: account
+#: code:addons/account/models/company.py:0
+#, python-format
+msgid "Unposted Entries"
+msgstr "Ongeboekte boekingen"
+
+#. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_account_move_filter
 msgid "Unposted Journal Entries"
 msgstr "Ongeboekte boekingsregels"
@@ -15777,6 +15794,7 @@ msgid "Vendor Bill Created"
 msgstr "Leveranciersfactuur aangemaakt"
 
 #. module: account
+#: code:addons/account/models/account_analytic_line.py:0
 #: code:addons/account/models/chart_template.py:0
 #: model_terms:ir.ui.view,arch_db:account.account_analytic_account_view_form_inherit
 #: model_terms:ir.ui.view,arch_db:account.res_config_settings_view_form
@@ -16336,6 +16354,14 @@ msgstr ""
 "financiële boekingen zijn gemaakt"
 
 #. module: account
+#: code:addons/account/models/company.py:0
+#, python-format
+msgid "Please contact your accountant to print the Hash integrity result."
+msgstr ""
+"Gelieve contact op te nemen met je accountant om het has-"
+"integriteitsresultaat af te drukken."
+
+#. module: account
 #: code:addons/account/models/account_account.py:0
 #, python-format
 msgid ""
@@ -16429,11 +16455,13 @@ msgstr ""
 #: code:addons/account/models/account_move.py:0
 #, python-format
 msgid ""
-"You cannot edit the following fields due to restrict mode being activated on"
-" the journal: %s."
+"You cannot edit the following fields: %s.\n"
+"The following entries are already hashed:\n"
+"%s"
 msgstr ""
-"Je kunt de volgende velden niet bewerken omdat de beperkingsmodus is "
-"geactiveerd op het dagboek: %s."
+"Je kan volgende velden niet bewerken: %s.\n"
+"De volgende boekingen zijn reeds gehasht:\n"
+"%s"
 
 #. module: account
 #: code:addons/account/models/account_move.py:0
@@ -17059,6 +17087,8 @@ msgid ""
 "The Unit of Measure (UoM) '%s' you have selected for product '%s', is "
 "incompatible with its category : %s."
 msgstr ""
+"De maateenheid (UoM) '%s' die je hebt geselecteerd voor product '%s', is "
+"niet compatibel met zijn categorie: %s."
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_account_analytic_default_kanban

@@ -636,14 +636,8 @@ msgstr "<b>Træk</b> denne knap for at ændre kolonne størrelsen."
 #: model_terms:ir.ui.view,arch_db:website.view_edit_robots
 msgid ""
 "<br/><br/>\n"
-"                    Example of rule:<br/>\n"
-"                    <code class=\"ml-4\">Disallow: /web/login</code><br/>\n"
-"                    <code class=\"ml-4\">Allow: *</code>"
+"                    Example of rule:<br/>"
 msgstr ""
-"<br/><br/>\n"
-"                    Eksempel på regel:<br/>\n"
-"                    <code class=\"ml-4\">Tillad ikke: /web/login</code><br/>\n"
-"                    <code class=\"ml-4\">Tillad: *</code>"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.s_carousel
@@ -9872,6 +9866,13 @@ msgstr "Denne side vil blive udgivet den {{ date_formatted }}"
 
 #. module: website
 #. openerp-web
+#: code:addons/website/static/src/js/menu/translate.js:0
+#, python-format
+msgid "This translation is not editable."
+msgstr ""
+
+#. module: website
+#. openerp-web
 #: code:addons/website/static/src/js/menu/seo.js:0
 #, python-format
 msgid ""
@@ -10111,6 +10112,13 @@ msgstr "Overgang"
 #, python-format
 msgid "Translate Attribute"
 msgstr "Oversæt egenskab"
+
+#. module: website
+#. openerp-web
+#: code:addons/website/static/src/js/menu/translate.js:0
+#, python-format
+msgid "Translate header in the text. Menu is generated automatically."
+msgstr ""
 
 #. module: website
 #. openerp-web
@@ -11298,6 +11306,13 @@ msgstr "Du kan ikke fjerne et felt der er påkrævet af selve modellen."
 #, python-format
 msgid "You can't remove the submit button of the form"
 msgstr "Du kan ikke fjerne indgiv knappen fra formularen."
+
+#. module: website
+#: code:addons/website/models/website.py:0
+#, python-format
+msgid ""
+"You cannot delete default website %s. Try to change its settings instead"
+msgstr ""
 
 #. module: website
 #: code:addons/website/controllers/backend.py:0

@@ -231,9 +231,11 @@ class StockMoveLine(models.Model):
             else:
                 for sml in smls:
                     qty = max(sml.product_uom_qty, sml.qty_done)
-                    sml.location_dest_id = sml.move_id.location_dest_id.with_context(exclude_sml_ids=excluded_smls.ids)._get_putaway_strategy(
+                    putaway_loc_id = sml.move_id.location_dest_id.with_context(exclude_sml_ids=excluded_smls.ids)._get_putaway_strategy(
                         sml.product_id, quantity=qty, packaging=sml.move_id.product_packaging_id,
                     )
+                    if putaway_loc_id != sml.location_dest_id:
+                        sml.location_dest_id = putaway_loc_id
                     excluded_smls -= sml
 
     def _get_default_dest_location(self):
@@ -295,7 +297,7 @@ class StockMoveLine(models.Model):
                     ml.move_id.picking_id.immediate_transfer and \
                     ml.move_id.state != 'done' and \
                     'qty_done' in vals:
-                ml.move_id.product_uom_qty = ml.move_id.quantity_done
+                ml.move_id.with_context(avoid_putaway_rules=True).product_uom_qty = ml.move_id.quantity_done
             if ml.state == 'done':
                 if 'qty_done' in vals:
                     ml.move_id.product_uom_qty = ml.move_id.quantity_done
@@ -553,7 +555,7 @@ class StockMoveLine(models.Model):
             raise UserError(_('You need to supply a Lot/Serial Number for product: \n - ') +
                               '\n - '.join(mls_tracked_without_lot.mapped('product_id.display_name')))
         ml_to_create_lot = self.env['stock.move.line'].browse(ml_ids_to_create_lot)
-        ml_to_create_lot._create_and_assign_production_lot()
+        ml_to_create_lot.with_context(bypass_reservation_update=True)._create_and_assign_production_lot()
 
         mls_to_delete = self.env['stock.move.line'].browse(ml_ids_to_delete)
         mls_to_delete.unlink()
@@ -835,4 +837,5 @@ class StockMoveLine(models.Model):
             'picking_type_id': self.picking_id.picking_type_id.id,
             'restrict_partner_id': self.picking_id.owner_id.id,
             'company_id': self.picking_id.company_id.id,
+            'partner_id': self.picking_id.partner_id.id,
         }

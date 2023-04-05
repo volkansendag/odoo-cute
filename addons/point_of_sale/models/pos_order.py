@@ -197,7 +197,7 @@ class PosOrder(models.Model):
             'quantity': order_line.qty if self.amount_total >= 0 else -order_line.qty,
             'discount': order_line.discount,
             'price_unit': order_line.price_unit,
-            'name': order_line.full_product_name or order_line.product_id.display_name,
+            'name': order_line.product_id.display_name or order_line.full_product_name,
             'tax_ids': [(6, 0, order_line.tax_ids_after_fiscal_position.ids)],
             'product_uom_id': order_line.product_uom_id.id,
         }
@@ -206,7 +206,7 @@ class PosOrder(models.Model):
         invoice_lines = []
         for line in self.lines:
             invoice_lines.append((0, None, self._prepare_invoice_line(line)))
-            if line.order_id.pricelist_id.discount_policy == 'without_discount' and float_compare(line.price_unit, line.product_id.lst_price, precision_rounding=self.currency_id.rounding):
+            if line.order_id.pricelist_id.discount_policy == 'without_discount' and float_compare(line.price_unit, line.product_id.lst_price, precision_rounding=self.currency_id.rounding) < 0:
                 invoice_lines.append((0, None, {
                     'name': _('Price discount from %s -> %s',
                               float_repr(line.product_id.lst_price, self.currency_id.decimal_places),
@@ -361,7 +361,7 @@ class PosOrder(models.Model):
             if order.is_total_cost_computed:
                 order.margin = sum(order.lines.mapped('margin'))
                 amount_untaxed = order.currency_id.round(sum(line.price_subtotal for line in order.lines))
-                order.margin_percent = not float_is_zero(amount_untaxed, order.currency_id.rounding) and order.margin / amount_untaxed or 0
+                order.margin_percent = not float_is_zero(amount_untaxed, precision_rounding=order.currency_id.rounding) and order.margin / amount_untaxed or 0
             else:
                 order.margin = 0
                 order.margin_percent = 0
@@ -855,7 +855,7 @@ class PosOrder(models.Model):
             'partner_id': order.partner_id.id,
             'user_id': order.user_id.id,
             'sequence_number': order.sequence_number,
-            'creation_date': order.date_order.astimezone(timezone),
+            'creation_date': str(order.date_order.astimezone(timezone)),
             'fiscal_position_id': order.fiscal_position_id.id,
             'to_invoice': order.to_invoice,
             'to_ship': order.to_ship,
@@ -1150,7 +1150,7 @@ class PosOrderLine(models.Model):
     def _compute_margin(self):
         for line in self:
             line.margin = line.price_subtotal - line.total_cost
-            line.margin_percent = not float_is_zero(line.price_subtotal, line.currency_id.rounding) and line.margin / line.price_subtotal or 0
+            line.margin_percent = not float_is_zero(line.price_subtotal, precision_rounding=line.currency_id.rounding) and line.margin / line.price_subtotal or 0
 
 
 class PosOrderLineLot(models.Model):

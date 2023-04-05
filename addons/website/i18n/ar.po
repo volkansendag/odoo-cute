@@ -639,14 +639,8 @@ msgstr "<b>اسحب</b> هذا الزر لتغيير حجم العمود. "
 #: model_terms:ir.ui.view,arch_db:website.view_edit_robots
 msgid ""
 "<br/><br/>\n"
-"                    Example of rule:<br/>\n"
-"                    <code class=\"ml-4\">Disallow: /web/login</code><br/>\n"
-"                    <code class=\"ml-4\">Allow: *</code>"
+"                    Example of rule:<br/>"
 msgstr ""
-"<br/><br/>\n"
-"                    مثال على قاعدة:<br/>\n"
-"                    <code class=\"ml-4\">Disallow: /web/login</code><br/>\n"
-"                    <code class=\"ml-4\">Allow: *</code>"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.s_carousel
@@ -9862,6 +9856,13 @@ msgstr "سوف يتم نشر هذه الصفحة بتاريخ {{ date_formatted 
 
 #. module: website
 #. openerp-web
+#: code:addons/website/static/src/js/menu/translate.js:0
+#, python-format
+msgid "This translation is not editable."
+msgstr ""
+
+#. module: website
+#. openerp-web
 #: code:addons/website/static/src/js/menu/seo.js:0
 #, python-format
 msgid ""
@@ -10102,6 +10103,13 @@ msgstr "انتقال"
 #, python-format
 msgid "Translate Attribute"
 msgstr "ترجمة الخاصية"
+
+#. module: website
+#. openerp-web
+#: code:addons/website/static/src/js/menu/translate.js:0
+#, python-format
+msgid "Translate header in the text. Menu is generated automatically."
+msgstr ""
 
 #. module: website
 #. openerp-web
@@ -11292,6 +11300,13 @@ msgstr "لا يمكنك إزالة حقل مطلوب من قِبَل النمو�
 #, python-format
 msgid "You can't remove the submit button of the form"
 msgstr "لا يمكنك إزالة زر الإرسال من الاستمارة "
+
+#. module: website
+#: code:addons/website/models/website.py:0
+#, python-format
+msgid ""
+"You cannot delete default website %s. Try to change its settings instead"
+msgstr ""
 
 #. module: website
 #: code:addons/website/controllers/backend.py:0
