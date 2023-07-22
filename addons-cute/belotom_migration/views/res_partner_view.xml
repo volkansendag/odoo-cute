@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="1">
+        <record id="get_res_partner_from_belotom_cron_update_data" model="ir.cron">
+            <field name="name">Müşterileri belotom veritabanından aktar</field>
+            <field name="interval_number">10</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="False"/>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model_id" ref="model_res_partner"/>
+            <field name="code">model.get_res_partner_from_belotom('1',True)</field>
+            <field name="state">code</field>
+        </record>
+    </data>
+
+    <data noupdate="1">
+        <record id="get_res_partner_from_belsat_cron_update_data" model="ir.cron">
+            <field name="name">Müşterileri belsat veritabanından aktar</field>
+            <field name="interval_number">10</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="False"/>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model_id" ref="model_res_partner"/>
+            <field name="code">model.get_res_partner_from_belsat('1,2,3')</field>
+            <field name="state">code</field>
+        </record>
+    </data>
+
+    <record id="belotom_partner_improve_view" model="ir.ui.view">
+        <field name="name">beletom_migration.partner.improve.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="vat" position="after">
+                <field name="belotom_vergi_dairesi"/>
+                <field name="belotom_kod"/>
+                <field name="belotom_kodbld"/>
+                <field name="belsat_kod"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="res_partner_view_deneme_search" model="ir.ui.view">
+        <field name="name">res.partner.search.inherit.belotom</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='inactive']" position="before">
+                <filter string="Belediyeler (Belotom)" name="customer" domain="[('belotom_kodbld','=', 1)]"/>
+                <filter string="Diğer" name="customer" domain="[('belotom_kodbld','!=', 1)]"/>
+                <separator/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="project_task_tree_view">
+       <field name="name">res.partner.bls.tree</field>
+       <field name="model">res.partner</field>
+       <field name="type">tree</field>
+       <field name="inherit_id" ref="base.view_partner_tree"/>
+       <field name="arch" type="xml">
+           <xpath expr="/tree/field[@name='country_id']" position="replace"></xpath>
+           <xpath expr="/tree/field[@name='state_id']" position="replace"></xpath>
+           <xpath expr="/tree/field[@name='city']" position="replace"></xpath>
+
+           <xpath expr="/tree/field[@name='display_name']" position="after">
+               <field name="state_id" readonly="1" />
+               <field name="city" readonly="1" />
+           </xpath>
+       </field>
+   </record>
+
+</odoo>

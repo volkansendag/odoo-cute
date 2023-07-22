@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="1">
+        <record id="conversation_cron_update_data" model="ir.cron">
+            <field name="name">Görüşme kayıtlarını Belotom'dan getir</field>
+            <field name="interval_number">10</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="False"/>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model_id" ref="model_conversation"/>
+            <field name="code">model.get_conversations_from_belotom(1000)</field>
+            <field name="state">code</field>
+        </record>
+    </data>
+
+    <data noupdate="1">
+        <record id="conversation_from_belsat_cron_update_data" model="ir.cron">
+            <field name="name">Görüşme kayıtlarını Belsat'dan getir</field>
+            <field name="interval_number">10</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="False"/>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model_id" ref="model_conversation"/>
+            <field name="code">model.get_conversations_from_belsat(1000)</field>
+            <field name="state">code</field>
+        </record>
+    </data>
+
+    <record id="action_open_conversations" model="ir.actions.act_window">
+        <field name="name">Görüşme Kayıtları</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">conversation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk görüşme kaydınızı oluşturun !
+            </p>
+        </field>
+    </record>
+
+    <record id="view_conversation_pivot" model="ir.ui.view">
+        <field name="name">conversation.pivot</field>
+        <field name="model">conversation</field>
+        <field name="arch" type="xml">
+            <pivot string="Görüşme Kayıtları" sample="1">
+                <field name="partner_id" />
+                <field name="platform_id" />
+                <field name="class_id" />
+                <field name="type_id" />
+                <field name="partner_section_id" />
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_conversation_graph" model="ir.ui.view">
+        <field name="name">conversation.graph</field>
+        <field name="model">conversation</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <graph string="Görüşme Kayıtları" sample="1">
+                <field name="user_id"/>
+                <field name="duration" type="measure" />
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_conversation_kanban" model="ir.ui.view">
+        <field name="name">conversation.kanban</field>
+        <field name="model">conversation</field>
+        <field name="arch" type="xml">
+            <kanban default_order='start_date desc'>
+                <field name="id"/>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <templates>
+                    <progressbar field="state" colors='{"confirm": "success", "cancel": "danger", "draft": "warning"}'/>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <b class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </b>
+                                -
+                                <strong>
+                                    <field name="type_id"/>
+                                    <field name="platform_id"/>
+                                </strong>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div>
+                                    <field name="partner_id"/>
+                                </div>
+                                <div>
+                                    <field name="user_id"/>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="priority" widget="priority"/>
+                                    <div class="o_kanban_inline_block ml4 mr4">
+                                        <field name="activity_ids" widget="kanban_activity"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_conversation_tree" model="ir.ui.view">
+        <field name="name">conversation.tree</field>
+        <field name="model">conversation</field>
+        <field name="arch" type="xml">
+            <tree sample="1" default_order='start_date desc'>
+                <field name="id" optional="hide" />
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="type_id"/>
+                <field name="state"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="duration"/>
+                <field name="source_name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_conversation_form" model="ir.ui.view">
+        <field name="name">conversation.form</field>
+        <field name="model">conversation</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done,cancel"
+                           options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="name"/>
+                    </group>
+
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="partner_personal_name"/>
+                        </group>
+                        <group>
+                            <field name="partner_section_id"/>
+                            <field name="source_name"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="duration"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="type_id"/>
+                            <field name="class_id"/>
+                            <field name="platform_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note" widget="html" colspan="4"/>
+                    </group>
+
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_conversation_search" model="ir.ui.view">
+        <field name="name">conversation.search</field>
+        <field name="model">conversation</field>
+        <field name="arch" type="xml">
+            <search string="Görüşmeler">
+                <field name="partner_id"/>
+                <field name="type_id"/>
+                <field name="user_id"/>
+                <field name="name"/>
+                <filter string="Bugün"  name="today_filter"
+                        domain="[('start_date', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),
+                        ('start_date', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]"/>
+                <filter string="Bu Hafta" name="current_week"
+                        domain="[('start_date', '&lt;=', ((context_today()+relativedelta(weeks=0, weekday=-1)).strftime('%Y-%m-%d'))),
+                        ('start_date', '&gt;=', ((context_today()-relativedelta(weeks=1, weekday=0)).strftime('%Y-%m-%d')))]"/>
+                <filter name="filter_start_date" string="Başlangıç Tarihi" date="start_date" />
+                <separator/>
+                <filter name="filter_type_id" string="Tahsilat" domain="[('type_id.name', 'ilike', 'tahsilat')]" />
+                <filter name="filter_source_name_belsat" string="Belsat" domain="[('source_name', '=', 'belsat')]"/>
+                <filter name="filter_source_name_belotom" string="Belotom" domain="[('source_name', '=', 'belotom')]"/>
+                <separator/>
+                <filter name="filter_current_user" string="Görüşmelerim" domain="[('user_id', '=', uid)]"/>
+                <separator/>
+                <filter name="filter_draft" string="Devam Ediyor" domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_done" string="Çözüldü" domain="[('state', '=', 'done')]"/>
+                <filter name="filter_cancel" string="Yapılmayacak" domain="[('state', '=', 'cancel')]"/>
+                <separator/>
+                <group expand="0" string="Grupla">
+                    <filter string="Müşteri" name="partner_id_group" domain="" context="{'group_by':'partner_id'}"/>
+                    <filter string="Personel" name="user_id_group" domain="" context="{'group_by':'user_id'}"/>
+                    <filter string="Durum" name="state_group" domain="" context="{'group_by':'state'}"/>
+                    <filter string="Başlangıç Tarihi" name="start_date_group" domain="" context="{'group_by':'start_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_conversation_views" model="ir.actions.act_window">
+        <field name="name">Görüşme Kayıtları Kartları</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">conversation</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph</field>
+        <field name="context"></field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk görüşme kaydınızı oluştur!
+            </p>
+        </field>
+    </record>
+
+    <!-- Add contextual button on partner form view -->
+    <record id="view_partners_form_conversation" model="ir.ui.view">
+        <field name="name">view.res.partner.form.conversation</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field eval="1" name="priority"/>
+        <field name="groups_id" eval="[(4, ref('conversations.group_conversation_user'))]"/>
+        <field name="arch" type="xml">
+            <data>
+                <div name="button_box" position="inside">
+                    <button class="oe_stat_button o_res_partner_tip_opp" type="object"
+                        name="action_view_conversation"
+                        icon="fa-phone"
+                        groups="conversations.group_conversation_user"
+                        context="{'default_partner_id': active_id }">
+                        <field string="Görüşmeler" name="conversation_count" widget="statinfo"/>
+                    </button>
+                </div>
+            </data>
+        </field>
+    </record>
+
+    <menuitem id="menu_conversation_root"
+              name="Görüşme Kayıtları"
+              web_icon="conversations,static/description/icon.png"
+              sequence="40"/>
+
+    <menuitem id="menu_conversation_settings_root"
+              name="Ayarlar"
+              parent="menu_conversation_root"
+              groups="group_conversation_manager"
+              sequence="12"/>
+
+    <menuitem id="menu_conversation"
+              name="Görüşmeler"
+              parent="menu_conversation_root"
+              action="action_conversation_views"
+              sequence="10"/>
+
+</odoo>

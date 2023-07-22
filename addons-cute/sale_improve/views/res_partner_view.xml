@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sale_improve_res_partner_view" model="ir.ui.view">
+        <field name="name">sale_improve.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <field name="contact_permission"/>
+                <field name="source_of_info"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_sale_improve_order_line_tree" model="ir.ui.view">
+        <field name="name">sale.order.line.tree</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+            <tree string="Sales Order Lines 2" create="false" delete="false">
+                <field name="date_order"/>
+                <field name="order_id"/>
+                <field name="order_partner_id"/>
+                <field name="name"/>
+                <field name="salesman_id"/>
+                <field name="product_uom_qty"/>
+                <field name="qty_to_invoice" invisible="1"/>
+                <field name="product_uom" string="Unit of Measure" groups="uom.group_uom" invisible="1"/>
+                <field name="price_subtotal" sum="Total" widget="monetary"/>
+                <field name="currency_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sale_improve_sale_order_line_form" model="ir.actions.act_window">
+        <field name="name">Satış Satırları</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="domain">[('order_partner_id', '=', active_id)]</field>
+        <field name="view_id" ref="view_sale_improve_order_line_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Tüm satış satırlarını listele.
+            </p>
+        </field>
+    </record>
+
+
+    <record id="view_sale_improve_res_partner_products" model="ir.ui.view">
+        <field name="name">res.partner.sale_improve.products</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook[last()]" position="inside">
+                <page string="Mevcut Ürünler" name="res_partner_products">
+                    <group>
+                        <div>
+                            <button type="action"
+                                    name="sale_improve.action_sale_improve_sale_order_line_form"
+                                    string="Tüm ürünleri görüntüle"
+                            />
+                        </div>
+                    </group>
+                    <group>
+
+                        <field name="sale_order_line_ids" nolabel="1" readonly="1">
+                            <tree editable="bottom">
+                                <field name="date_order"/>
+                                <field name="order_id"/>
+                                <field name="name"/>
+                                <field name="product_uom_qty"/>
+                            </tree>
+                        </field>
+
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

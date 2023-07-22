@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_quality_docs_tree" model="ir.ui.view">
+        <field name="name">quality.docs.tree</field>
+        <field name="model">quality.docs</field>
+        <field name="arch" type="xml">
+            <tree sample="1" default_order='id desc'>
+                <field name="reference"/>
+                <field name="name"/>
+                <field name="institution_id"/>
+                <field name="issue_date"/>
+                <field name="next_issue_date"/>
+                <field name="validity_date"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="view_quality_docs_search" model="ir.ui.view">
+        <field name="name">quality.docs.search</field>
+        <field name="model">quality.docs</field>
+        <field name="arch" type="xml">
+            <search string="Kalite Belgeleri">
+                <field name="name"/>
+                <field name="reference"/>
+                <field name="institution_id"/>
+                <field name="validity_date"/>
+                <field name="next_issue_date"/>
+
+                <filter string="Sonraki Denetleme" name="filter_last_expense_date_this_month" date="next_issue_date"/>
+
+                <separator/>
+                <group expand="0" string="Grupla">
+                    <filter string="Kurum" name="institution_id_group" domain="" context="{'group_by':'institution_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_quality_docs_form" model="ir.ui.view">
+        <field name="name">quality.docs.form</field>
+        <field name="model">quality.docs</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="reference"/>
+                            <field name="institution_id"/>
+                        </group>
+                        <group>
+                            <field name="issue_date"/>
+                            <field name="next_issue_date"/>
+                            <field name="validity_date"/>
+                            <field name="duration"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note" widget="html" colspan="4"/>
+                    </group>
+                </sheet>
+                 <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_quality_docs_views" model="ir.actions.act_window">
+        <field name="name">Kalite Belgeleri</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">quality.docs</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph</field>
+        <field name="context"></field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk kalite belgenizi oluştur!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_quality_management_root"
+              name="Kalite Belgeleri"
+              web_icon="quality_management,static/description/icon.png"
+              sequence="40"/>
+
+    <menuitem id="menu_quality_docs_root"
+              name="Belgeler"
+              parent="menu_quality_management_root"
+              action="action_quality_docs_views"
+              sequence="12"/>
+
+    <menuitem id="menu_quality_management_settings_root"
+              name="Ayarlar"
+              parent="menu_quality_management_root"
+              groups="group_quality_docs_manager"
+              sequence="14"/>
+
+
+
+</odoo>

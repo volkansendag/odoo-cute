@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_res_partner_source_of_info_tree" model="ir.ui.view">
+        <field name="name">res.partner.sourceofinfo.tree</field>
+        <field name="model">res.partner.sourceofinfo</field>
+        <field name="arch" type="xml">
+            <tree sample="1" default_order='id desc'>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_res_partner_source_of_info_form" model="ir.ui.view">
+        <field name="name">res.partner.sourceofinfo.form</field>
+        <field name="model">res.partner.sourceofinfo</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <field name="note" widget="html" colspan="4"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_res_partner_source_of_info_views" model="ir.actions.act_window">
+        <field name="name">Bilgi Kaynağı</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner.sourceofinfo</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk bilgi kaynağını oluştur!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_res_partner_source_of_info_settings"
+              action="action_res_partner_source_of_info_views"
+              name="Bilgi Kaynakları"
+              sequence="4"
+              groups="base.group_system"
+              parent="contacts.res_partner_menu_config"/>
+
+</odoo>

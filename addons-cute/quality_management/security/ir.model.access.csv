@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_quality_docs_user,access.quality.docs,model_quality_docs,group_quality_docs_user,1,0,0,0
+access_quality_institution_user,access.quality.institution,model_quality_institution,group_quality_docs_user,1,0,0,0
+access_quality_docs_manager,access.quality.docs,model_quality_docs,group_quality_docs_manager,1,1,1,1
+access_quality_institution_manager,access.quality.institution,model_quality_institution,group_quality_docs_manager,1,1,1,1

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="1">
+        <record id="creditcard_cron_update_data" model="ir.cron">
+            <field name="name">Kredi kartı bilgilerini Belotom'dan getir</field>
+            <field name="interval_number">10</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model_id" ref="model_creditcard"/>
+            <field name="code">model.get_creditcard_move_from_belotom()</field>
+            <field name="state">code</field>
+        </record>
+    </data>
+
+    <record id="action_open_banks" model="ir.actions.act_window">
+        <field name="name">Bankalar</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">creditcard.bank</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first appointment !
+            </p>
+        </field>
+    </record>
+
+    <record id="view_creditcard_pivot" model="ir.ui.view">
+        <field name="name">creditcard.pivot</field>
+        <field name="model">creditcard</field>
+        <field name="arch" type="xml">
+            <pivot string="Kredi Kartları" sample="1">
+                <field name="bank_id" type="row"/>
+                <field name="limit" type="measure"/>
+                <field name="current_limit" type="measure"/>
+                <field name="expense_count" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_creditcard_graph" model="ir.ui.view">
+        <field name="name">creditcard.graph</field>
+        <field name="model">creditcard</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <graph string="Kredi Kartları" sample="1">
+                <field name="bank_id"/>
+                <field name="limit" type="measure"/>
+                <field name="expense_count" type="measure"/>
+                <field name="current_limit" type="measure"  operator="+"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_creditcard_kanban" model="ir.ui.view">
+        <field name="name">creditcard.kanban</field>
+        <field name="model">creditcard</field>
+        <field name="arch" type="xml">
+            <kanban default_order='current_limit desc'>
+                <field name="id"/>
+                <field name="name"/>
+                <field name="card_no"/>
+                <field name="note"/>
+                <templates>
+                    <progressbar field="state" colors='{"confirm": "success", "cancel": "danger", "draft": "warning"}'/>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <b class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </b>
+                                -
+                                <strong>
+                                    <field name="belotom_personel_adi_soyadi"/>
+                                </strong>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div>
+                                    <field name="bank_id"/>
+                                </div>
+                                <div>
+                                    <field name="current_limit"/>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="priority" widget="priority"/>
+                                    <div class="o_kanban_inline_block ml4 mr4">
+                                        <field name="activity_ids" widget="kanban_activity"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_creditcard_tree" model="ir.ui.view">
+        <field name="name">creditcard.tree</field>
+        <field name="model">creditcard</field>
+        <field name="arch" type="xml">
+            <tree sample="1" default_order='current_limit desc'>
+                <field name="name"/>
+                <field name="card_no"/>
+                <field name="bank_id"/>
+                <field name="type_id"/>
+                <field name="limit"/>
+                <field name="current_limit"/>
+                <field name="belotom_personel_adi_soyadi"/>
+                <field name="state"/>
+                <field name="last_expense_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_creditcard_form" model="ir.ui.view">
+        <field name="name">creditcard.form</field>
+        <field name="model">creditcard</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,cancel"
+                           options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_get_attachment_view"
+                                class="oe_stat_button"
+                                icon="fa-file-text-o"
+                                type="object">
+                            <field name="expense_count" widget="statinfo" string="Alışveriş Sayısı"/>
+                        </button>
+                        <button name="action_get_attachment_view"
+                                class="oe_stat_button"
+                                icon="fa-file-text-o"
+                                type="object">
+                            <field name="current_limit" widget="statinfo" string="Kalan Limit"/>
+                        </button>
+                    </div>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="card_no" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="card_no1"/>
+                            <field name="card_no2"/>
+                            <field name="limit"/>
+                            <field name="card_cvv"/>
+                        </group>
+                        <group>
+                            <field name="belotom_id" readonly="True"/>
+                            <field name="belotom_personel_adi_soyadi" readonly="True"/>
+                            <field name="bank_id"/>
+                            <field name="type_id"/>
+                            <field name="card_owner_type"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note" widget="html" colspan="4"/>
+                    </group>
+
+                    <!--                    <field name="expense_ids">-->
+                    <!--                        <tree string="Harcamalar"  edit="0" create="false" delete="false" default_order="used_date desc" limit="10">-->
+                    <!--                            <field name="name" />-->
+                    <!--                            <field name="period" />-->
+                    <!--                            <field name="used_date" />-->
+                    <!--                            <field name="amount" />-->
+                    <!--                        </tree>-->
+                    <!--                    </field>-->
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_creditcard_search" model="ir.ui.view">
+        <field name="name">creditcard.search</field>
+        <field name="model">creditcard</field>
+        <field name="arch" type="xml">
+            <search string="Kredi Kartları">
+                <field name="card_no2"/>
+                <field name="name"/>
+                <field name="belotom_personel_adi_soyadi"/>
+                <field name="bank_id"/>
+
+                <filter string="Son Harcama Tarihi" name="filter_last_expense_date_this_month" date="last_expense_date"
+                        default_period="this_month"/>
+                <filter string="Güncel Limiti > 10.000" name="filter_current_limit_10000"
+                        domain="[('current_limit', '>', 10000)]"/>
+                <filter string="Yıldızlı Kartlar" name="high_priority" domain="[('priority', '>', '0')]"/>
+
+                <separator/>
+                <filter name="draft" string="Taslak" domain="[('state', '=', 'draft')]"/>
+                <filter name="confirm" string="Onaylı" domain="[('state', '=', 'confirm')]"/>
+                <filter name="cancel" string="İptal" domain="[('state', '=', 'cancel')]"/>
+                <separator/>
+                <group expand="0" string="Grupla">
+                    <filter string="Durum" name="state_group" domain="" context="{'group_by':'state'}"/>
+                    <filter string="Sahip Türü" name="card_owner_type_group" domain="" context="{'group_by':'card_owner_type'}"/>
+                    <filter string="Banka" name="bank_id_group" domain="" context="{'group_by':'bank_id'}"/>
+                    <filter string="Kart Tipi" name="type_id_group" domain="" context="{'group_by':'type_id'}"/>
+                    <filter string="Sahip Adı" name="belotom_personel_adi_soyadi_group" domain="" context="{'group_by':'belotom_personel_adi_soyadi'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_creditcard_patient" model="ir.actions.act_window">
+        <field name="name">Kredi Kartları</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">creditcard</field>
+        <field name="view_mode">kanban,tree,form,pivot,graph</field>
+        <field name="context">{ 'search_default_filter_current_limit_10000': True,
+            'search_default_type_id_group': True
+            }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk kredi kartını oluştur!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_creditcard_root"
+              name="Kredi Kartı"
+              web_icon="creditcards,static/description/icon.png"
+              sequence="10"/>
+
+    <menuitem id="menu_creditcard"
+              name="Kredi Kartları"
+              parent="menu_creditcard_root"
+              action="action_creditcard_patient"
+              sequence="10"/>
+
+    <menuitem id="menu_creditcard_settings"
+              name="Kredi Kartları"
+              parent="menu_creditcard"
+              action="action_creditcard_patient"
+              sequence="10"/>
+
+    <menuitem id="menu_creditcard_settings_root"
+              name="Ayarlar"
+              parent="menu_creditcard_root"
+              sequence="12"/>
+
+
+</odoo>

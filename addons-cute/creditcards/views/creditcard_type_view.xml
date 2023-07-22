@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_creditcard_type_kanban" model="ir.ui.view">
+        <field name="name">creditcard.type.kanban</field>
+        <field name="model">creditcard.type</field>
+        <field name="arch" type="xml">
+            <kanban sample="1">
+                <field name="id"/>
+                <field name="title" />
+                <field name="note"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <ul>
+                                    <li>
+                                        Adı: <field name="title" />
+                                    </li>
+                                    <li>
+                                        Kart Sayısı: <field name="creditcard_count" />
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_creditcard_type_tree" model="ir.ui.view">
+        <field name="name">creditcard.type.tree</field>
+        <field name="model">creditcard.type</field>
+        <field name="arch" type="xml">
+            <tree sample="1">
+                <field name="title"/>
+                <field name="note"/>
+                <field name="creditcard_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_creditcard_type_form" model="ir.ui.view">
+        <field name="name">creditcard.type.form</field>
+        <field name="model">creditcard.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="title"/>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_creditcard_type_search" model="ir.ui.view">
+        <field name="name">creditcard.type.search</field>
+        <field name="model">creditcard.type</field>
+        <field name="arch" type="xml">
+            <search string="Kart Tipi">
+                <field name="title"/>
+                <field name="note"/>
+                <separator/>
+                <filter string="Arşivde" name="inactive" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_creditcard_type" model="ir.actions.act_window">
+        <field name="name">Kart Tipleri</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">creditcard.type</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk Kart Tipini Oluştur!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_creditcard_type"
+              name="Kart Tipleri"
+              parent="menu_creditcard_settings_root"
+              action="action_creditcard_type"
+              sequence="10"/>
+
+
+</odoo>

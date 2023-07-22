@@ -1,0 +1,31 @@
+# -*- coding: utf-8 -*-
+{
+    'name': 'Görüşme Kayıtları Modülü',
+    'version': '1.0.0',
+    'summary': 'Müşteri görüşme kayıtlarının tutulduğu modüldür..',
+    'sequence': -100,
+    'description': """Görüşme Kayıtları Modülü""",
+    'category': 'Sale',
+    'author': 'Volkan Şendağ',
+    'maintainer': 'Volkan Şendağ',
+    'website': 'https://belsis.com.tr',
+    'license': 'AGPL-3',
+    'depends': [
+        'mail', 'sale', 'belotom_migration',
+    ],
+    'data': [
+        'data/data.xml',
+        'views/conversation_view.xml',
+        'views/conversation_partner_section_view.xml',
+        'views/conversation_class_view.xml',
+        'views/conversation_type_view.xml',
+        'views/conversation_platform_view.xml',
+        'security/conversation_security.xml',
+        'security/ir.model.access.csv',
+    ],
+    'demo': [],
+    'images': ['static/description/icon.png'],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

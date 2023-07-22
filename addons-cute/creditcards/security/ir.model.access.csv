@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_creditcard_user,access.creditcard,model_creditcard,group_creditcard_user,1,0,0,0
+access_creditcard_bank_user,access.creditcard_bank,model_creditcard_bank,group_creditcard_user,1,0,0,0
+access_creditcard_type_user,access.creditcard_type,model_creditcard_type,group_creditcard_user,1,0,0,0
+access_creditcard_period_user,access.creditcard_period,model_creditcard_period,group_creditcard_user,1,0,0,0
+access_creditcard_expense_user,access.creditcard_expense,model_creditcard_expense,group_creditcard_user,1,0,0,0
+access_creditcard_manager,access.creditcard,model_creditcard,group_creditcard_manager,1,1,1,1
+access_creditcard_bank_manager,access.creditcard_bank,model_creditcard_bank,group_creditcard_manager,1,1,1,1
+access_creditcard_type_manager,access.creditcard_type,model_creditcard_type,group_creditcard_manager,1,1,1,1
+access_creditcard_period_manager,access.creditcard_period,model_creditcard_period,group_creditcard_manager,1,1,1,1
+access_creditcard_expense_manager,access.creditcard_expense,model_creditcard_expense,group_creditcard_manager,1,1,1,1

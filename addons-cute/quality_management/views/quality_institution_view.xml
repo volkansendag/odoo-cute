@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_quality_institution_tree" model="ir.ui.view">
+        <field name="name">quality.institution.tree</field>
+        <field name="model">quality.institution</field>
+        <field name="arch" type="xml">
+            <tree sample="1" default_order='id desc'>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_quality_institution_form" model="ir.ui.view">
+        <field name="name">quality.institution.form</field>
+        <field name="model">quality.institution</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <field name="note" widget="html" colspan="4"/>
+                    </group>
+                </sheet>
+                 <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_quality_institution_views" model="ir.actions.act_window">
+        <field name="name">Kalite Kuruluşu</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">quality.institution</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk kaite kuruluşunu oluştur!
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_quality_institution_settings"
+              name="Kalite Kuruluşu"
+              parent="menu_quality_management_settings_root"
+              action="action_quality_institution_views"
+              sequence="15"/>
+
+
+</odoo>

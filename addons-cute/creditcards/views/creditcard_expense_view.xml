@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="1">
+        <record id="creditcard_expense_cron_update_data" model="ir.cron">
+            <field name="name">Kredi kartı harcamalarını Belotom'dan getir</field>
+            <field name="interval_number">10</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="False" />
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model_id" ref="model_creditcard_expense"/>
+            <field name="code">model.get_creditcard_expense_from_belotom(1000)</field>
+            <field name="state">code</field>
+        </record>
+    </data>
+
+    <record id="view_creditcard_expense_pivot" model="ir.ui.view">
+        <field name="name">creditcard.expense.pivot</field>
+        <field name="model">creditcard.expense</field>
+        <field name="arch" type="xml">
+            <pivot string="Kredi Kartı Harcamaları" sample="1">
+                <field name="creditcard_id" type="row"/>
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_creditcard_expense_graph" model="ir.ui.view">
+        <field name="name">creditcard.expense.graph</field>
+        <field name="model">creditcard.expense</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <graph string="Kredi Kartı Harcamaları" sample="1">
+                <field name="creditcard_id"/>
+                <field name="amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_creditcard_expense_kanban" model="ir.ui.view">
+        <field name="name">creditcard.expense.kanban</field>
+        <field name="model">creditcard.expense</field>
+        <field name="arch" type="xml">
+            <kanban default_order="id asc">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="note"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <ul>
+                                    <li>
+                                        <field name="name"/>
+                                    </li>
+                                    <li>
+                                        <field name="note"/>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_creditcard_expense_tree" model="ir.ui.view">
+        <field name="name">creditcard.expense.tree</field>
+        <field name="model">creditcard.expense</field>
+        <field name="arch" type="xml">
+            <tree sample="1">
+                <field name="name"/>
+                <field name="creditcard_id"/>
+                <field name="used_date"/>
+                <field name="pay_date"/>
+                <field name="amount"/>
+                <field name="belotom_personel_adi_soyadi"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_creditcard_expense_form" model="ir.ui.view">
+        <field name="name">creditcard.expense.form</field>
+        <field name="model">creditcard.expense</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="creditcard_id"/>
+                            <field name="amount"/>
+                        </group>
+                        <group>
+                            <field name="used_date"/>
+                            <field name="pay_date"/>
+                            <field name="belotom_personel_adi_soyadi" readonly="True" />
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note" widget="html" colspan="4"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_creditcard_expense_search" model="ir.ui.view">
+        <field name="name">creditcard.expense.search</field>
+        <field name="model">creditcard.expense</field>
+        <field name="arch" type="xml">
+            <search string="Kredi Kartı Harcamaları">
+                <field name="creditcard_id"/>
+                <field name="name"/>
+                <field name="note"/>
+                <field name="belotom_personel_adi_soyadi"/>
+                <separator/>
+                <filter string="Harcama Tarihi" name="filter_used_date_this_month" date="used_date" default_period="this_month"/>
+                <filter string="Ödeme Tarihi" name="filter_pay_date_this_month" date="pay_date" default_period="this_month"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_creditcard_expense" model="ir.actions.act_window">
+        <field name="name">Kredi Kartı Harcamaları</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">creditcard.expense</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph</field>
+        <field name="context">{"search_default_filter_used_date_this_month":1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk kredi kartı dönemini oluştur!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_creditcard_expense"
+              name="Kredi Kartı Harcamaları"
+              parent="menu_creditcard"
+              action="action_creditcard_expense"
+              sequence="10" />
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="1">
+        <record id="update_hr_leave_allocation_from_belotom_data" model="ir.cron">
+            <field name="name">Belotom izin tahakkuklarını odoo'ya aktarır.</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active" eval="False"/>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model_id" ref="model_hr_leave_allocation"/>
+            <field name="code">model.update_hr_leave_allocation_from_belotom(1)</field>
+            <field name="state">code</field>
+        </record>
+    </data>
+</odoo>

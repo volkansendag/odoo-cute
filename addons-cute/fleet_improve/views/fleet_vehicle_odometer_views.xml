@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fleet_improve_vehicle_odometer_pivot_inherit" model="ir.ui.view">
+        <field name="name">fleet_improve.fleet.vehicle.odometer.search.inherit</field>
+        <field name="model">fleet.vehicle.odometer</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="vehicle_id" type="col"/>
+                <field name="used_driver_id" type="row"/>
+                <field name="customer_id" type="row"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id='fleet_improve_vehicle_odometer_search_inherit' model='ir.ui.view'>
+        <field name="name">fleet_improve.fleet.vehicle.odometer.search.inherit</field>
+        <field name="model">fleet.vehicle.odometer</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_odometer_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="replace">
+                <search string="Vehicles odometers">
+                    <field name="vehicle_id"/>
+                    <field name="used_driver_id"/>
+                    <field name="customer_id"/>
+                    <field name="description"/>
+                    <field name="value"/>
+                    <filter string="Özel Kullanım" name="private_usage" domain="[('private_usage', '=', True)]"/>
+                    <separator/>
+                    <filter string="Kullanım Tarihi" name="filter_used_date_this_month" date="date"
+                            default_period="this_month"/>
+
+                    <group expand="0" string="Group By">
+                        <filter name="groupby_vehicle" context="{'group_by': 'vehicle_id'}" string="Araç"/>
+                        <filter name="groupby_driver_id" context="{'group_by': 'used_driver_id'}" string="Sürücü"/>
+                        <filter name="groupby_customer_id" context="{'group_by': 'customer_id'}" string="Müşteri"/>
+                        <filter name="groupby_date" context="{'group_by': 'date'}" string="Tarih"/>
+                        <filter name="groupby_private_usage" context="{'group_by': 'private_usage'}"
+                                string="Özel Kullanım"/>
+                    </group>
+                </search>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="fleet_improve_vehicle_odometer_tree_inherit" model="ir.ui.view">
+        <field name="name">fleet_improve.fleet.vehicle.odometer.tree.inherit</field>
+        <field name="model">fleet.vehicle.odometer</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_odometer_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="replace">
+                <tree string="Odometer Logs">
+                    <field name="date" optional="hide"/>
+                    <field name="begin_time"/>
+                    <field name="end_time"/>
+                    <field name="vehicle_id" widget="many2one_avatar"/>
+                    <field name="used_driver_id" widget="many2one_avatar"/>
+                    <field name="customer_id"/>
+                    <field name="begin_value"/>
+                    <field name="value"/>
+                    <field name="used_value"/>
+                    <field name="private_usage" optional="hide"/>
+                    <field name="private_usage_km" optional="hide"/>
+                    <field name="unit" optional="hide"/>
+                    <field name="description" optional="hide"/>
+                </tree>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="fleet_improve_vehicle_odometer_form_inherit" model="ir.ui.view">
+        <field name="name">fleet_improve.fleet.vehicle.odometer.form.inherit</field>
+        <field name="model">fleet.vehicle.odometer</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_odometer_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="replace">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="vehicle_id"/>
+                            <field name="used_driver_id"/>
+                            <label for="begin_value"/>
+                            <div class="o_row">
+                                <field name="begin_value" class="oe_inline"/>
+                                <field name="unit" class="ml-2"/>
+                            </div>
+                            <label for="value"/>
+                            <div class="o_row">
+                                <field name="value" class="oe_inline"/>
+                                <field name="unit" class="ml-2"/>
+                            </div>
+                            <label for="used_value"/>
+                            <div class="o_row">
+                                <field name="used_value" class="oe_inline"/>
+                                <field name="unit" class="ml-2"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="begin_time"/>
+                            <field name="end_time"/>
+                            <field name="customer_id"/>
+                            <field name="private_usage" />
+                            <field name="private_usage_km" attrs="{'invisible': [('private_usage', '=', False)]}" />
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </xpath>
+        </field>
+    </record>
+</odoo>

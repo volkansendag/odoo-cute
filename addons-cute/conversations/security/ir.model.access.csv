@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_conversation_user,access.conversation,model_conversation,group_conversation_user,1,1,1,0
+access_conversation_partner_section_user,access.conversation.partner.section,model_conversation_partner_section,group_conversation_user,1,0,0,0
+access_conversation_class_user,access.conversation.class,model_conversation_class,group_conversation_user,1,0,0,0
+access_conversation_type_user,access.conversation.type,model_conversation_type,group_conversation_user,1,0,0,0
+access_conversation_platform_user,access.conversation.platform,model_conversation_platform,group_conversation_user,1,0,0,0
+
+access_conversation_manager,access.conversation,model_conversation,group_conversation_manager,1,1,1,1
+access_conversation_partner_section_manager,access.conversation.partner.section,model_conversation_partner_section,group_conversation_manager,1,1,1,1
+access_conversation_class_manager,access.conversation.class,model_conversation_class,group_conversation_manager,1,1,1,1
+access_conversation_type_manager,access.conversation.type,model_conversation_type,group_conversation_manager,1,1,1,1
+access_conversation_platform_manager,access.conversation.platform,model_conversation_platform,group_conversation_manager,1,1,1,1

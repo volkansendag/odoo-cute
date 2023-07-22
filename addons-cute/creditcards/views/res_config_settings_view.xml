@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.belsis.belotom</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="15"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Belotom Ayarları" string="Belotom Ayarları"
+                     data-key="creditcards">
+                    <div class="content-group">
+                        <h2>Belotom Ayarları</h2>
+                        <div class="mt16 row o_settings_container">
+                            <div class="ml10 col-6 o_setting_box">
+                                <div class="content">
+                                    <h2>Veritabanı Ayarları</h2>
+                                </div>
+                                <div style="padding:10px">
+                                    <div class="row">
+                                        <label for="db_driver_name" class="col-5 o_light_label"/>
+                                        <field name="db_driver_name" class="col-6"/>
+                                        <label for="belotom_server" class="col-5 o_light_label"/>
+                                        <field name="belotom_server" class="col-6"/>
+                                        <label for="belotom_db" class="col-5 o_light_label"/>
+                                        <field name="belotom_db" class="col-6"/>
+                                        <label for="belotom_uid" class="col-5 o_light_label"/>
+                                        <field name="belotom_uid" class="col-6"/>
+                                        <label for="belotom_pwd" class="col-5 o_light_label"/>
+                                        <field name="belotom_pwd" password="True" class="col-6"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

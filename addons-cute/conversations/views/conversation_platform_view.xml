@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_conversation_platform_tree" model="ir.ui.view">
+        <field name="name">conversation.platform.tree</field>
+        <field name="model">conversation.platform</field>
+        <field name="arch" type="xml">
+            <tree sample="1" default_order='id desc'>
+                <field name="name"/>
+                <field name="belotom_id"/>
+                <field name="belsat_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_conversation_platform_form" model="ir.ui.view">
+        <field name="name">conversation.platform.form</field>
+        <field name="model">conversation.platform</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="belotom_id"/>
+                        <field name="belsat_id"/>
+                    </group>
+                    <group>
+                        <field name="note" widget="html" colspan="4"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_conversation_platform_views" model="ir.actions.act_window">
+        <field name="name">Görüşme Şekli</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">conversation.platform</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk sınıfı oluştur!
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_conversation_platform_settings"
+              name="Görüşme Şekli"
+              parent="menu_conversation_settings_root"
+              action="action_conversation_platform_views"
+              sequence="10"/>
+
+
+</odoo>

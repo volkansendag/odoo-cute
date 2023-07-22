@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sale_order_temp_pivot" model="ir.ui.view">
+        <field name="name">sale.order.temp.pivot</field>
+        <field name="model">sale.order.temp</field>
+        <field name="arch" type="xml">
+            <pivot string="Satış Geçmişi" sample="1">
+                <field name="partner_id" />
+                <field name="user_id" />
+                <field name="order_date"/>
+                <field name="amount_untaxed" />
+                <field name="amount_total" type="measure" />
+                <field name="amount_total_usd" />
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_sale_order_temp_graph" model="ir.ui.view">
+        <field name="name">sale.order.temp.graph</field>
+        <field name="model">sale.order.temp</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <graph string="Eski Satışlar" sample="1">
+                <field name="order_date"/>
+                <field name="amount_total" type="measure" />
+                <field name="amount_total_usd" />
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_sale_order_temp_form" model="ir.ui.view">
+        <field name="name">sale.order.temp.form</field>
+        <field name="model">sale.order.temp</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                            <field name="user_id"/>
+                            <field name="musteri_ili"/>
+                            <field name="musteri_adi"/>
+                            <field name="temsilci_soyadi"/>
+                        </group>
+                        <group>
+                            <field name="order_date"/>
+                            <field name="currency_rate"/>
+                            <field name="amount_untaxed"/>
+                            <field name="amount_tax"/>
+                            <field name="amount_total"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sale_order_temp_tree" model="ir.ui.view">
+        <field name="name">sale.order.temp.tree</field>
+        <field name="model">sale.order.temp</field>
+        <field name="arch" type="xml">
+            <tree sample="1" default_order='id desc'>
+                <field name="name"/>
+                <field name="order_date"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="currency_rate" />
+                <field name="amount_total"/>
+                <field name="amount_total_usd"/>
+                <field name="musteri_ili"/>
+                <field name="musteri_adi"/>
+                <field name="temsilci_soyadi"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_sale_order_temp_search" model="ir.ui.view">
+        <field name="name">sale.order.temp.search</field>
+        <field name="model">sale.order.temp</field>
+        <field name="arch" type="xml">
+            <search string="Eski Satışlar">
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="name"/>
+                 <filter name="filter_order_date" string="Sipariş Tarihi" date="order_date" />
+                <separator/>
+                <group expand="0" string="Grupla">
+                    <filter string="Müşteri" name="partner_id_group" domain="" context="{'group_by':'partner_id'}"/>
+                    <filter string="Personel" name="user_id_group" domain="" context="{'group_by':'user_id'}"/>
+                    <filter string="Satış Tarihi" name="start_date_group" domain="" context="{'group_by':'order_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="sale_order_temp_enter" model="ir.actions.act_window">
+        <field name="name">Satış Geçmişi Girişi</field>
+        <field name="res_model">sale.order.temp</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Yeni bir kayıt giriniz
+            </p><p>
+                Geçmiş satış bilgilerini girebilirsiniz.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="sale_order_temp"
+              name="Geçmiş Satışlar"
+              parent="sale.menu_sale_invoicing"
+              groups="sales_team.group_sale_salesman"
+              action="sale_order_temp_enter"
+              sequence="10" />
+
+</odoo>

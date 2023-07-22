@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.module.category" id="module_creditcards">
+        <field name="name">Kredi Kartları</field>
+        <field name="description">Kredi kartılarının takip edileceği modül.</field>
+        <field name="sequence">12</field>
+    </record>
+
+    <record id="group_creditcard_user" model="res.groups">
+        <field name="name">Kullanıcı</field>
+        <field name="category_id" ref="module_creditcards"/>
+    </record>
+
+     <record id="group_creditcard_manager" model="res.groups">
+        <field name="name">Yönetici</field>
+        <field name="category_id" ref="module_creditcards"/>
+        <field name="implied_ids" eval="[(4, ref('group_creditcard_user'))]"/>
+    </record>
+
+</odoo>
