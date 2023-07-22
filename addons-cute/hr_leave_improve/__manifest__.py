@@ -4,7 +4,7 @@
     'name': 'İzin Modülü Ek Özellikler',
     'version': '1.5',
     'category': 'Human Resources/İzin Modülü Ek Özellikler',
-    'sequence': 85,
+    'sequence': 10,
     'summary': 'Izin modulu icin yeni gelistirmeler',
     'website': 'https://volkansendag.com',
     'description': """
@@ -17,15 +17,17 @@ Yapilacak calismalar
 """,
     'depends': ['hr', 'resource'],
     'data': [
-        'security/hr_leave_improve_security.xml',
         'views/hr_leave_improve_reports.xml',
         'views/hr_leave_improve_mail.xml',
         'views/hr_employee_improve_view.xml',
-        'views/hr_leave_type_improve_view.xml'
+        'views/hr_leave_type_improve_view.xml',
+        'views/hr_leave_improve_view.xml',
+        'security/hr_leave_improve_security.xml',
+        'security/ir.model.access.csv'
     ],
     'demo': [],
     'installable': True,
-    'application': True,
+    'application': False,
     'auto_install': False,
     'license': 'LGPL-3',
 }

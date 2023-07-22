@@ -3,6 +3,9 @@
 
 from odoo import api, fields, models
 from odoo.exceptions import AccessError, UserError, ValidationError
+from pytz import timezone, UTC
+from odoo.addons.resource.models.resource import float_to_time, HOURS_PER_DAY
+from odoo.tools.float_utils import float_round
 from odoo.tools.translate import _
 import base64
 
@@ -10,29 +13,65 @@ import base64
 class HolidaysRequest(models.Model):
     _inherit = "hr.leave"
 
+    request_hour_from = fields.Selection(selection='_get_request_hour_from', string='Hour from')
+    request_hour_to = fields.Selection(selection='_get_request_hour_to', string='Hour to')
+
+    @api.model
+    def _get_request_hour_to(self):
+
+        selection = [
+            ('8.83', '8:50 AM'), ('9', '9:00 AM'),
+            ('9.17', '9:10 AM'), ('9.5', '9:30 AM'),
+            ('10', '10:00 AM'), ('10.5', '10:30 AM'),
+            ('11', '11:00 AM'), ('11.5', '11:30 AM'),
+            ('12', '12:00 PM'), ('12.5', '12:30 PM'),
+            ('13', '1:00 PM'), ('13.5', '1:30 PM'),
+            ('14', '2:00 PM'), ('14.5', '2:30 PM'),
+            ('15', '3:00 PM'), ('15.5', '3:30 PM'),
+            ('16', '4:00 PM'), ('16.5', '4:30 PM'),
+            ('17', '5:00 PM'), ('17.5', '5:30 PM'),
+            ('18', '6:00 PM'), ('18.5', '6:30 PM')]
+
+        return selection
+
+    @api.depends('number_of_hours_display')
+    def _compute_number_of_hours_text(self):
+        # YTI Note: All this because a readonly field takes all the width on edit mode...
+        for leave in self:
+            leave.number_of_hours_text = '%s%g %s%s' % (
+                '' if leave.request_unit_half or leave.request_unit_hours else '(',
+                float_round(leave.number_of_hours_display, precision_digits=2),
+                _('Hours'),
+                '' if leave.request_unit_half or leave.request_unit_hours else ')')
+
+    @api.model
+    def _get_request_hour_from(self):
+
+        selection = [
+            ('8.5', '8:30 AM'),
+            ('9', '9:00 AM'), ('9.5', '9:30 AM'),
+            ('10', '10:00 AM'), ('10.5', '10:30 AM'),
+            ('11', '11:00 AM'), ('11.5', '11:30 AM'),
+            ('12', '12:00 PM'), ('12.5', '12:30 PM'),
+            ('13', '1:00 PM'), ('13.5', '1:30 PM'),
+            ('14', '2:00 PM'), ('14.5', '2:30 PM'),
+            ('15', '3:00 PM'), ('15.5', '3:30 PM'),
+            ('16', '4:00 PM'), ('16.5', '4:30 PM'),
+            ('17', '5:00 PM'), ('17.5', '5:30 PM'),
+            ('18', '6:00 PM')]
+        return selection
+
+    def action_approve(self):
+        res = super(HolidaysRequest, self)
+        res.action_approve()
+
+        self.action_send_email()
+
     def action_send_email(self):
-        print(self)
+        if self.holiday_status_id.info_mail:
+            self.send_email_with_pdf_attach()
 
-        template = self.env.ref('auth_signup.reset_password_email')
-        email_values = {
-            'email_cc': False,
-            'auto_delete': True,
-            'recipient_ids': [],
-            'partner_ids': [],
-            'scheduled_date': False,
-        }
-
-        resUser = self.env['res.users'].browse(2)
-
-        for usr in resUser:
-            if not usr.email:
-                raise UserError(_("Cannot send email: user %s has no email address.", usr.name))
-            email_values['email_to'] = usr.email
-
-        template.send_mail(usr.id, force_send=True, raise_exception=True, email_values=email_values)
-
-        raise UserError(_('Time off request state must be "Refused" or "To Approve" in order to be reset to draft.'))
-        return True
+            return True
 
     def send_email_with_pdf_attach(self):
         repdata = self.env.ref('hr_leave_improve.hr_leave_improve_report')

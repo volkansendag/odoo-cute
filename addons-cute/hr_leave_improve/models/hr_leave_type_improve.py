@@ -9,5 +9,6 @@ class HrLeaveTypeImprove(models.Model):
 
     leave_reason = fields.Selection([('yillik', 'Yıllık İzin'), ('mazeret', 'Mazeret İzni')], string='İzin Sebebi', default='yillik')
     paid_leave = fields.Boolean(string='İzin Şekli (Ücretli)', default=True)
+    info_mail = fields.Char(string='Bilgi Mail Adresi', help="Onaylanması durumunda bilgi amaçlı mail gönderilecektir.")
 
 

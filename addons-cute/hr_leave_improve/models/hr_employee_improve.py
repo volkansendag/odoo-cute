@@ -6,4 +6,5 @@ from odoo import fields, models
 class HrEmployeImprove(models.Model):
     _inherit = "hr.employee"
 
-    register_no = fields.Char(string='Sicil No')
+    register_no = fields.Char(string='Belotom Sicil No')
+    official_register_no = fields.Char(string='Resmi Sicil No')

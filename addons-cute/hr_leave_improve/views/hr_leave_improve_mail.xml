@@ -7,8 +7,8 @@
             <field name="name">Izin Bilgilendirme Maili</field>
             <field name="model_id" ref="hr_holidays.model_hr_leave"/>
             <field name="subject">Izin Formu</field>
-            <field name="email_to">{{object.first_approver_id.work_email}}</field>
-            <field name="email_cc">{{object.employee_id.work_email}}</field>
+            <field name="email_to">{{object.holiday_status_id.info_mail}}</field>
+            <field name="email_cc"></field>
             <field name="body_html" type="html">
                 <div>
                     Merhaba,

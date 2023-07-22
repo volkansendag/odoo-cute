@@ -11,6 +11,9 @@
             <field name="time_type" position="after">
                 <field name="paid_leave" />
             </field>
+            <field name="time_type" position="after">
+                <field name="info_mail" />
+            </field>
         </field>
     </record>
 </odoo>

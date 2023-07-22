@@ -7,6 +7,7 @@
         <field name="arch" type="xml">
             <field name="user_id" position="after">
                 <field name="register_no" required="1"/>
+                <field name="official_register_no" required="1"/>
             </field>
         </field>
     </record>
