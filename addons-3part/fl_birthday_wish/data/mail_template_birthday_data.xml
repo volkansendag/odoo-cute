@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_birthday_wishes_employee_template" model="mail.template">
+            <field name="name">Doğumgünü Kutlaması - Personel - Template</field>
+            <field name="subject">Birthday Wishes {{ object.name }}</field>
+            <field name="email_from">{{ user.email }}</field>
+            <field name="email_to">{{ object.work_email }}</field>
+            <field name="model_id" ref="fl_birthday_wish.model_hr_employee"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+                <p style="margin:0px 0 12px 0;box-sizing:border-box;">Sevgili <strong t-out="object.name or ''" style="box-sizing:border-box;font-weight:bolder;" contenteditable="false"></strong>,</p>
+                <p style="margin:0px 0 12px 0;box-sizing:border-box;">Sağlık, huzur ve başarı her daim sizinle olsun. Doğum gününüzü en içten dileklerimizle kutlarız.!</p>
+                <p style="margin:0px 0 12px 0;box-sizing:border-box;">Birlikte nice yıllara...<br><br>
+Sevgilerle,<br>
+                <strong style="box-sizing:border-box;font-weight:bolder;">BELSİS Ailesi</strong></p><p style="margin:0px 0 12px 0;box-sizing:border-box;font-size: 12px;">
+<img class="img-fluid o_we_custom_image" src="https://odoo.belsis.com.tr/web/image/4977-68e133b7/dogum_gunu.png?access_token=f2ae0f14-ed22-4364-810b-79a2ff461aa8" width="190" height="267" style="border-style:none;box-sizing:border-box;display:inline-block;height:auto;max-width:100%;vertical-align:middle;">
+<br></p>
+            ]]>
+            </field>
+        </record>
+
+        <record id="email_birthday_wishes_partner_template" model="mail.template">
+            <field name="name">Doğumgünü Kutlaması - Rehber - Template</field>
+            <field name="subject">Birthday Wishes {{ object.name }}</field>
+            <field name="email_from">{{ user.email }}</field>
+            <field name="email_to">{{ object.email }}</field>
+            <field name="model_id" ref="fl_birthday_wish.model_res_partner"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+                <p style="margin:0px 0 12px 0;box-sizing:border-box;">Sevgili <strong t-out="object.name or ''" style="box-sizing:border-box;font-weight:bolder;" contenteditable="false"></strong>,</p>
+                <p style="margin:0px 0 12px 0;box-sizing:border-box;">Sağlık, huzur ve başarı her daim sizinle olsun. Doğum gününüzü en içten dileklerimizle kutlarız.!</p>
+                <p style="margin:0px 0 12px 0;box-sizing:border-box;">Birlikte nice yıllara...<br><br>
+Sevgilerle,<br>
+                <strong style="box-sizing:border-box;font-weight:bolder;">BELSİS Ailesi</strong></p><p style="margin:0px 0 12px 0;box-sizing:border-box;font-size: 12px;">
+<img class="img-fluid o_we_custom_image" src="https://odoo.belsis.com.tr/web/image/4977-68e133b7/dogum_gunu.png?access_token=f2ae0f14-ed22-4364-810b-79a2ff461aa8" width="190" height="267" style="border-style:none;box-sizing:border-box;display:inline-block;height:auto;max-width:100%;vertical-align:middle;">
+<br></p>
+            ]]>
+            </field>
+        </record>
+    </data>
+</odoo>
