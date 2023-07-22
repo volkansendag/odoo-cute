@@ -33,18 +33,18 @@ class MrpConsumptionWarning(models.TransientModel):
     def action_confirm(self):
         ctx = dict(self.env.context)
         ctx.pop('default_mrp_production_ids', None)
-        action_from_do_finish = False
-        if self.env.context.get('from_workorder'):
-            if self.env.context.get('active_model') == 'mrp.workorder':
-                action_from_do_finish = self.env['mrp.workorder'].browse(self.env.context.get('active_id')).do_finish()
-        action_from_mark_done = self.mrp_production_ids.with_context(ctx, skip_consumption=True).button_mark_done()
-        return action_from_do_finish or action_from_mark_done
+        return self.mrp_production_ids.with_context(ctx, skip_consumption=True).button_mark_done()
 
     def action_set_qty(self):
         self.mrp_production_ids.action_assign()
         for production in self.mrp_production_ids:
             for move in production.move_raw_ids:
                 rounding = move.product_uom.rounding
+                for line in self.mrp_consumption_warning_line_ids:
+                    if line.product_id != move.product_id:
+                        continue
+                    if float_compare(line.product_expected_qty_uom, move.product_uom_qty, precision_rounding=rounding) != 0:
+                        move.product_uom_qty = line.product_uom_id._compute_quantity(line.product_expected_qty_uom, move.product_uom)
                 if float_compare(move.quantity_done, move.should_consume_qty, precision_rounding=rounding) == 0:
                     continue
                 new_qty = float_round((production.qty_producing - production.qty_produced) * move.unit_factor, precision_rounding=move.product_uom.rounding)

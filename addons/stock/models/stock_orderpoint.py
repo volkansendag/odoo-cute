@@ -361,7 +361,7 @@ class StockWarehouseOrderpoint(models.Model):
                 location=loc.id,
                 to_date=today + relativedelta.relativedelta(days=days)
             ).read(['virtual_available'])
-            for qty in qties:
+            for (product, qty) in zip(products, qties):
                 if float_compare(qty['virtual_available'], 0, precision_rounding=product.uom_id.rounding) < 0:
                     to_refill[(qty['id'], loc.id)] = qty['virtual_available']
             products.invalidate_recordset()
@@ -408,11 +408,11 @@ class StockWarehouseOrderpoint(models.Model):
                 self.env['stock.warehouse.orderpoint'].browse(orderpoint_id).qty_forecast += product_qty
             else:
                 orderpoint_values = self.env['stock.warehouse.orderpoint']._get_orderpoint_values(product, location_id)
-                warehouse_id = self.env['stock.location'].browse(location_id).warehouse_id
+                location = self.env['stock.location'].browse(location_id)
                 orderpoint_values.update({
                     'name': _('Replenishment Report'),
-                    'warehouse_id': warehouse_id.id,
-                    'company_id': warehouse_id.company_id.id,
+                    'warehouse_id': location.warehouse_id.id or self.env['stock.warehouse'].search([('company_id', '=', location.company_id.id)]).id,
+                    'company_id': location.company_id.id,
                 })
                 orderpoint_values_list.append(orderpoint_values)
 
@@ -549,7 +549,7 @@ class StockWarehouseOrderpoint(models.Model):
                         ('res_model_id', '=', self.env.ref('product.model_product_template').id),
                         ('note', '=', error_msg)])
                     if not existing_activity:
-                        orderpoint.product_id.product_tmpl_id.activity_schedule(
+                        orderpoint.product_id.product_tmpl_id.sudo().activity_schedule(
                             'mail.mail_activity_data_warning',
                             note=error_msg,
                             user_id=orderpoint.product_id.responsible_id.id or SUPERUSER_ID,

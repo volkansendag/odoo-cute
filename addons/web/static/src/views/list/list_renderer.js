@@ -18,6 +18,8 @@ import { getClassNameFromDecoration } from "@web/views/utils";
 import { ViewButton } from "@web/views/view_button/view_button";
 import { useBounceButton } from "@web/views/view_hook";
 import { Widget } from "@web/views/widgets/widget";
+import { getFormattedValue } from "../utils";
+import { localization } from "@web/core/l10n/localization";
 
 import {
     Component,
@@ -30,6 +32,7 @@ import {
     useState,
     useEffect,
 } from "@odoo/owl";
+import { _t } from "@web/core/l10n/translation";
 
 const formatters = registry.category("formatters");
 
@@ -53,6 +56,14 @@ const FIXED_FIELD_COLUMN_WIDTHS = {
     monetary: "104px",
     handle: "33px",
 };
+
+/**
+ * @param {HTMLElement} parent
+ */
+ function containsActiveElement(parent) {
+    const { activeElement } = document;
+    return parent !== activeElement && parent.contains(activeElement);
+}
 
 function getElementToFocus(cell) {
     return getTabableElements(cell)[0] || cell;
@@ -190,6 +201,7 @@ export class ListRenderer extends Component {
             this.columnWidths = null;
             this.freezeColumnWidths();
         });
+        this.isRTL = localization.direction === "rtl";
     }
 
     displaySaveNotification() {
@@ -526,6 +538,29 @@ export class ListRenderer extends Component {
                 continue;
             }
             const { rawAttrs, widget } = this.props.list.activeFields[fieldName];
+            let currencyId;
+            if (type === "monetary" || widget === "monetary") {
+                const currencyField =
+                    this.props.list.activeFields[fieldName].options.currency_field ||
+                    this.fields[fieldName].currency_field ||
+                    "currency_id";
+                currencyId =
+                    currencyField in this.props.list.activeFields &&
+                    values[0][currencyField] &&
+                    values[0][currencyField][0];
+                if (currencyId) {
+                    const sameCurrency = values.every(
+                        (value) => currencyId === value[currencyField][0]
+                    );
+                    if (!sameCurrency) {
+                        aggregates[fieldName] = {
+                            help: _t("Different currencies cannot be aggregated"),
+                            value: "—",
+                        };
+                        continue;
+                    }
+                }
+            }
             const func =
                 (rawAttrs.sum && "sum") ||
                 (rawAttrs.avg && "avg") ||
@@ -549,6 +584,9 @@ export class ListRenderer extends Component {
                     digits: rawAttrs.digits ? JSON.parse(rawAttrs.digits) : undefined,
                     escape: true,
                 };
+                if (currencyId) {
+                    formatOptions.currencyId = currencyId;
+                }
                 aggregates[fieldName] = {
                     help: rawAttrs[func],
                     value: formatter ? formatter(aggregateValue, formatOptions) : aggregateValue,
@@ -560,14 +598,14 @@ export class ListRenderer extends Component {
 
     formatAggregateValue(group, column) {
         const { widget, rawAttrs } = column;
-        const fieldType = this.props.list.fields[column.name].type;
+        const field = this.props.list.fields[column.name];
         const aggregateValue = group.aggregates[column.name];
         if (!(column.name in group.aggregates)) {
             return "";
         }
-        const formatter = formatters.get(widget, false) || formatters.get(fieldType, false);
+        const formatter = formatters.get(widget, false) || formatters.get(field.type, false);
         const formatOptions = {
-            digits: rawAttrs.digits ? JSON.parse(rawAttrs.digits) : undefined,
+            digits: rawAttrs.digits ? JSON.parse(rawAttrs.digits) : field.digits,
             escape: true,
         };
         return formatter ? formatter(aggregateValue, formatOptions) : aggregateValue;
@@ -613,6 +651,10 @@ export class ListRenderer extends Component {
     isNumericColumn(column) {
         const { type } = this.fields[column.name];
         return ["float", "integer", "monetary"].includes(type);
+    }
+
+    shouldReverseHeader(column) {
+        return this.isNumericColumn(column) && (!this.isRTL);
     }
 
     isSortable(column) {
@@ -738,16 +780,7 @@ export class ListRenderer extends Component {
 
     getFormattedValue(column, record) {
         const fieldName = column.name;
-        const field = this.fields[fieldName];
-        const formatter = formatters.get(field.type, (val) => val);
-        const formatOptions = {
-            escape: false,
-            data: record.data,
-            isPassword: "password" in column.rawAttrs,
-            digits: column.rawAttrs.digits ? JSON.parse(column.rawAttrs.digits) : field.digits,
-            field: record.fields[fieldName],
-        };
-        return formatter(record.data[fieldName], formatOptions);
+        return getFormattedValue(record, fieldName, column.rawAttrs);
     }
 
     evalModifier(modifier, record) {
@@ -902,6 +935,14 @@ export class ListRenderer extends Component {
 
         if ((this.props.list.model.multiEdit && record.selected) || this.isInlineEditable(record)) {
             if (record.isInEdition && this.props.list.editedRecord === record) {
+                const cell = this.tableRef.el.querySelector(
+                    `.o_selected_row td[name='${column.name}']`
+                );
+                if (cell && containsActiveElement(cell)) {
+                    this.lastEditedCell = { column, record };
+                    // Cell is already focused.
+                    return;
+                }
                 this.focusCell(column);
                 this.cellToFocus = null;
             } else {
@@ -1522,8 +1563,15 @@ export class ListRenderer extends Component {
         group.toggle();
     }
 
+    get canSelectRecord() {
+        return !this.props.list.editedRecord && !this.props.list.model.useSampleModel;
+    }
+
     toggleSelection() {
         const list = this.props.list;
+        if (!this.canSelectRecord) {
+            return;
+        }
         if (list.selection.length === list.records.length) {
             list.records.forEach((record) => {
                 record.toggleSelection(false);
@@ -1537,6 +1585,9 @@ export class ListRenderer extends Component {
     }
 
     toggleRecordSelection(record) {
+        if (!this.canSelectRecord) {
+            return;
+        }
         record.toggleSelection();
         this.props.list.selectDomain(false);
     }

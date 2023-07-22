@@ -12,7 +12,6 @@ var core = require('web.core');
 const dom = require('web.dom');
 var mixins = require('web.mixins');
 var publicWidget = require('web.public.widget');
-var utils = require('web.utils');
 const wUtils = require('website.utils');
 
 var qweb = core.qweb;
@@ -987,9 +986,6 @@ registry.anchorSlide = publicWidget.Widget.extend({
      * @private
      */
     _onAnimateClick: function (ev) {
-        if (this.$target[0].pathname !== window.location.pathname) {
-            return;
-        }
         var hash = this.$target[0].hash;
         if (hash === '#top' || hash === '#bottom') {
             // If the anchor targets #top or #bottom, directly call the
@@ -1004,9 +1000,11 @@ registry.anchorSlide = publicWidget.Widget.extend({
             });
             return;
         }
-        if (!utils.isValidAnchor(hash)) {
+        if (!hash.length) {
             return;
         }
+        // Escape special characters to make the jQuery selector to work.
+        hash = '#' + $.escapeSelector(hash.substring(1));
         var $anchor = $(hash);
         const scrollValue = $anchor.attr('data-anchor');
         if (!$anchor.length || !scrollValue) {
@@ -1120,6 +1118,13 @@ registry.FooterSlideout = publicWidget.Widget.extend({
         this.__pixelEl.style.width = `1px`;
         this.__pixelEl.style.height = `1px`;
         this.__pixelEl.style.marginTop = `-1px`;
+        // On safari, add a background attachment fixed to fix the glitches that
+        // appear when scrolling the page with a footer slide out.
+        if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+            this.__pixelEl.style.backgroundColor = "transparent";
+            this.__pixelEl.style.backgroundAttachment = "fixed";
+            this.__pixelEl.style.backgroundImage = "url(/website/static/src/img/website_logo.svg)";
+        }
         this.el.appendChild(this.__pixelEl);
 
         return this._super(...arguments);
@@ -1131,6 +1136,42 @@ registry.FooterSlideout = publicWidget.Widget.extend({
         this._super(...arguments);
         this.el.classList.remove('o_footer_effect_enable');
         this.__pixelEl.remove();
+    },
+});
+
+registry.TopMenuCollapse = publicWidget.Widget.extend({
+    selector: "header #top_menu_collapse",
+
+    /**
+     * @override
+     */
+    async start() {
+        this.throttledResize = _.throttle(() => this._onResize(), 25);
+        window.addEventListener("resize", this.throttledResize);
+        return this._super(...arguments);
+    },
+    /**
+     * @override
+     */
+    destroy() {
+        this._super(...arguments);
+        window.removeEventListener("resize", this.throttledResize);
+    },
+
+    //--------------------------------------------------------------------------
+    // Handlers
+    //--------------------------------------------------------------------------
+
+    /**
+     * @private
+     */
+    _onResize() {
+        if (this.el.classList.contains("show")) {
+            const togglerEl = this.el.closest("nav").querySelector(".navbar-toggler");
+            if (getComputedStyle(togglerEl).display === "none") {
+                this.$el.collapse("hide");
+            }
+        }
     },
 });
 
@@ -1192,6 +1233,20 @@ registry.BottomFixedElement = publicWidget.Widget.extend({
         // button which is the main reason of this code).
         const $bottomFixedElements = $('.o_bottom_fixed_element');
         if (!$bottomFixedElements.length) {
+            return;
+        }
+
+        // The bottom fixed elements are always hidden when a modal is open
+        // thanks to the CSS that is based on the 'modal-open' class added to
+        // the body. However, when the modal does not have a backdrop (e.g.
+        // cookies bar), this 'modal-open' class is not added. That's why we
+        // handle it here. Note that the popup widget code triggers a 'scroll'
+        // event when the modal is hidden to make the bottom fixed elements
+        // reappear.
+        if (this.el.querySelector('.s_popup_no_backdrop.show')) {
+            for (const el of $bottomFixedElements) {
+                el.classList.add('o_bottom_fixed_element_hidden');
+            }
             return;
         }
 
@@ -1388,9 +1443,9 @@ registry.WebsiteAnimate = publicWidget.Widget.extend({
             // Cookies bar might be opened and considered as a modal but it is
             // not really one (eg 'discrete' layout), and should not be used as
             // scrollTop value.
-            const scrollTop = document.body.classList.contains('modal-open') ?
-                this.$target.find('.modal:visible').scrollTop() :
-                this.$scrollingElement.scrollTop();
+            const $closestModal = $el.closest(".modal:visible");
+            const scrollTop = $closestModal[0] ?
+                $closestModal.scrollTop() : this.$scrollingElement.scrollTop();
             const elTop = this._getElementOffsetTop(el) - scrollTop;
             let visible;
             const footerEl = el.closest('.o_footer_slideout');

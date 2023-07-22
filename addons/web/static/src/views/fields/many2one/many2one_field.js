@@ -136,6 +136,9 @@ export class Many2OneField extends Component {
     get resId() {
         return this.props.value && this.props.value[0];
     }
+    get value() {
+        return this.props.record.data[this.props.name];
+    }
     get Many2XAutocompleteProps() {
         return {
             value: this.displayName,
@@ -152,6 +155,7 @@ export class Many2OneField extends Component {
             nameCreateField: this.props.nameCreateField,
             setInputFloats: this.setFloating,
             autocomplete_container: this.autocompleteContainerRef,
+            kanbanViewId: this.props.kanbanViewId,
         };
     }
     computeActiveActions(props) {
@@ -274,6 +278,7 @@ Many2OneField.props = {
     string: { type: String, optional: true },
     canScanBarcode: { type: Boolean, optional: true },
     openTarget: { type: String, validate: (v) => ["current", "new"].includes(v), optional: true },
+    kanbanViewId: { type: [Number, Boolean], optional: true },
 };
 Many2OneField.defaultProps = {
     canOpen: true,
@@ -312,6 +317,7 @@ Many2OneField.extractProps = ({ attrs, field }) => {
         nameCreateField: attrs.options.create_name_field,
         canScanBarcode: canScanBarcode,
         openTarget: attrs.open_target,
+        kanbanViewId: attrs.kanban_view_ref ? JSON.parse(attrs.kanban_view_ref) : false,
     };
 };
 

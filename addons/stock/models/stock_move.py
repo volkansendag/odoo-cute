@@ -125,7 +125,7 @@ class StockMove(models.Model):
     scrapped = fields.Boolean(
         'Scrapped', related='location_dest_id.scrap_location', readonly=True, store=True)
     scrap_ids = fields.One2many('stock.scrap', 'move_id')
-    group_id = fields.Many2one('procurement.group', 'Procurement Group', default=_default_group_id)
+    group_id = fields.Many2one('procurement.group', 'Procurement Group', default=_default_group_id, index=True)
     rule_id = fields.Many2one(
         'stock.rule', 'Stock Rule', ondelete='restrict', help='The stock rule that created this stock move',
         check_company=True)
@@ -188,9 +188,7 @@ class StockMove(models.Model):
     @api.depends('product_id')
     def _compute_product_uom(self):
         for move in self:
-            if not move.product_uom:
-                move.product_uom = move.product_id.uom_id.id
-
+            move.product_uom = move.product_id.uom_id.id
 
     @api.depends('has_tracking', 'picking_type_id.use_create_lots', 'picking_type_id.use_existing_lots', 'state')
     def _compute_display_assign_serial(self):
@@ -488,7 +486,7 @@ Please change the quantity done or the rounding precision of your unit of measur
 
         def key_virtual_available(move, incoming=False):
             warehouse_id = move.location_dest_id.warehouse_id.id if incoming else move.location_id.warehouse_id.id
-            return warehouse_id, max(move.date, now)
+            return warehouse_id, max(move.date or now, now)
 
         # Prefetch efficiently virtual_available for _is_consuming draft move.
         prefetch_virtual_available = defaultdict(set)
@@ -1496,6 +1494,7 @@ Please change the quantity done or the rounding precision of your unit of measur
             if float_compare(taken_quantity, int(taken_quantity), precision_digits=rounding) != 0:
                 taken_quantity = 0
 
+        self.env.flush_all()
         try:
             with self.env.cr.savepoint():
                 if not float_is_zero(taken_quantity, precision_rounding=self.product_id.uom_id.rounding):
@@ -1626,6 +1625,7 @@ Please change the quantity done or the rounding precision of your unit of measur
                             'lot_id': lot_id.id,
                             'lot_name': lot_id.name,
                             'owner_id': owner_id.id,
+                            'package_id': package_id.id,
                         })
                         move_line_vals_list.append(move_line_vals)
                         missing_reserved_quantity -= qty_added
@@ -1712,7 +1712,7 @@ Please change the quantity done or the rounding precision of your unit of measur
         StockMove.browse(partially_available_moves_ids).write({'state': 'partially_available'})
         StockMove.browse(assigned_moves_ids).write({'state': 'assigned'})
         if not self.env.context.get('bypass_entire_pack'):
-            self.mapped('picking_id')._check_entire_pack()
+            self.picking_id._check_entire_pack()
         StockMove.browse(moves_to_redirect).move_line_ids._apply_putaway_strategy()
 
     def _action_cancel(self):
@@ -1826,6 +1826,8 @@ Please change the quantity done or the rounding precision of your unit of measur
                 .filtered(lambda p: p.quant_ids and len(p.quant_ids) > 1):
             if len(result_package.quant_ids.filtered(lambda q: not float_is_zero(abs(q.quantity) + abs(q.reserved_quantity), precision_rounding=q.product_uom_id.rounding)).mapped('location_id')) > 1:
                 raise UserError(_('You cannot move the same package content more than once in the same transfer or split the same package into two location.'))
+        if any(ml.package_id and ml.package_id == ml.result_package_id for ml in moves_todo.move_line_ids):
+            self.env['stock.quant']._unlink_zero_quants()
         picking = moves_todo.mapped('picking_id')
         moves_todo.write({'state': 'done', 'date': fields.Datetime.now()})
 
@@ -2027,11 +2029,11 @@ Please change the quantity done or the rounding precision of your unit of measur
             if move.state not in ('partially_available', 'assigned'):
                 continue
             for move_line in move.move_line_ids:
-                if move.has_tracking != 'none' and (
-                    (move.picking_type_id.use_existing_lots and not move_line.lot_id) or
-                    (move.picking_type_id.use_create_lots and not move_line.lot_name)):
-                    continue
-                move_line.qty_done = move_line.reserved_uom_qty
+                if move.has_tracking == 'none' or\
+                    (move.picking_type_id.use_existing_lots and move_line.lot_id) or\
+                    (move.picking_type_id.use_create_lots and move_line.lot_name) or\
+                    (not move.picking_type_id.use_existing_lots and not move.picking_type_id.use_create_lots):
+                    move_line.qty_done = move_line.reserved_uom_qty
 
     def _clear_quantities_to_zero(self):
         self.filtered(lambda m: m.state in ('partially_available', 'assigned')).move_line_ids.qty_done = 0

@@ -19,12 +19,14 @@ import {
     rightPos,
     moveNodes,
     nodeSize,
+    paragraphRelatedElements,
     prepareUpdate,
     setSelection,
     isMediaElement,
     isVisibleEmpty,
     isNotEditableNode,
     createDOMPathGenerator,
+    closestElement,
 } from '../utils/utils.js';
 
 Text.prototype.oDeleteBackward = function (offset, alreadyMoved = false) {
@@ -90,9 +92,24 @@ HTMLElement.prototype.oDeleteBackward = function (offset, alreadyMoved = false, 
         if (isUnbreakable(this) && (REGEX_BOOTSTRAP_COLUMN.test(this.className) || !isEmptyBlock(this))) {
             throw UNBREAKABLE_ROLLBACK_CODE;
         }
-        const parentEl = this.parentNode;
-
-        if (!isBlock(this) || isVisibleEmpty(this)) {
+        const parentEl = this.parentElement;
+        // Handle editable sub-nodes
+        if (
+            parentEl &&
+            parentEl.getAttribute("contenteditable") === "true" &&
+            parentEl.oid !== "root" &&
+            parentEl.parentElement &&
+            !parentEl.parentElement.isContentEditable &&
+            paragraphRelatedElements.includes(this.tagName) &&
+            !this.previousElementSibling
+        ) {
+            // The first child element of a contenteditable="true" zone which
+            // itself is contained in a contenteditable="false" zone can not be
+            // removed if it is paragraph-like.
+            throw UNREMOVABLE_ROLLBACK_CODE;
+        }
+        const closestLi = closestElement(this, 'li');
+        if ((closestLi && !closestLi.previousElementSibling) || !isBlock(this) || isVisibleEmpty(this)) {
             /**
              * Backspace at the beginning of an inline node, nothing has to be
              * done: propagate the backspace. If the node was empty, we remove
@@ -141,7 +158,8 @@ HTMLElement.prototype.oDeleteBackward = function (offset, alreadyMoved = false, 
          */
         if (
             !this.previousElementSibling &&
-            ['BLOCKQUOTE', 'H1', 'H2', 'H3', 'PRE'].includes(this.nodeName)
+            ['BLOCKQUOTE', 'H1', 'H2', 'H3', 'PRE'].includes(this.nodeName) &&
+            !closestLi
         ) {
             const p = document.createElement('p');
             p.replaceChildren(...this.childNodes);
@@ -231,6 +249,12 @@ HTMLBRElement.prototype.oDeleteBackward = function (offset, alreadyMoved = false
     if (rightState & CTYPES.BLOCK_INSIDE) {
         this.parentElement.oDeleteBackward(parentOffset, alreadyMoved);
     } else {
+        HTMLElement.prototype.oDeleteBackward.call(this, offset, alreadyMoved);
+    }
+};
+
+HTMLTableCellElement.prototype.oDeleteBackward = function (offset, alreadyMoved = false) {
+    if (offset) {
         HTMLElement.prototype.oDeleteBackward.call(this, offset, alreadyMoved);
     }
 };

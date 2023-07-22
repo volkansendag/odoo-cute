@@ -5,7 +5,7 @@
             <field name="model">stock.picking</field>
             <field name="priority" eval="2"/>
             <field name="arch" type="xml">
-                <calendar string="Calendar View" date_start="scheduled_date" color="partner_id" event_limit="5">
+                <calendar string="Calendar View" date_start="scheduled_date" color="partner_id" event_limit="5" quick_add="False">
                     <field name="partner_id" filters="1"/>
                     <field name="origin"/>
                     <field name="picking_type_id"/>
@@ -373,7 +373,7 @@
                         string="Package"
                         filter_domain="['|', ('move_line_ids.package_id.name', 'ilike', self), ('move_line_ids.result_package_id.name', 'ilike', self)]"
                         groups="stock.group_tracking_lot"/>
-                    <filter name="to_do_transfers" string="To Do" domain="[('user_id', 'in', [uid, False])]"/>
+                    <filter name="to_do_transfers" string="To Do" domain="['&amp;',('user_id', 'in', [uid, False]),('state','not in',['done','cancel'])]"/>
                     <filter name="my_transfers" string="My Transfers" domain="[('user_id', '=', uid)]"/>
                     <filter string="Starred" name="starred" domain="[('priority', '=', '1')]"/>
                     <separator/>

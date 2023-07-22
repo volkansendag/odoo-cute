@@ -17,7 +17,7 @@ msgstr ""
 "POT-Creation-Date: 2023-02-02 10:35+0000\n"
 "PO-Revision-Date: 2022-09-22 05:55+0000\n"
 "Last-Translator: Jolien De Paepe, 2023\n"
-"Language-Team: French (https://www.transifex.com/odoo/teams/41243/fr/)\n"
+"Language-Team: French (https://app.transifex.com/odoo/teams/41243/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -888,6 +888,7 @@ msgstr "Êtes-vous sûr de vouloir archiver tous ces enregistrements ?"
 
 #. module: web
 #. odoo-javascript
+#: code:addons/web/static/src/views/form/form_controller.js:0
 #: code:addons/web/static/src/legacy/js/views/form/form_controller.js:0
 #, python-format
 msgid "Are you sure that you want to archive this record?"
@@ -1669,14 +1670,14 @@ msgstr "Créer %s"
 #: code:addons/web/static/src/legacy/js/fields/relational_fields.js:0
 #, python-format
 msgid "Create and Edit..."
-msgstr "Créer et éditer..."
+msgstr "Créer et modifier..."
 
 #. module: web
 #. odoo-javascript
 #: code:addons/web/static/src/views/fields/relational_utils.js:0
 #, python-format
 msgid "Create and edit..."
-msgstr "Créer et éditer..."
+msgstr "Créer et modifier..."
 
 #. module: web
 #. odoo-javascript
@@ -1982,7 +1983,7 @@ msgstr "Ignorer l'enregistrement"
 #. module: web
 #: model:ir.model.fields,field_description:web.field_base_document_layout__display_name
 msgid "Display Name"
-msgstr "Afficher le nom"
+msgstr "Nom d'affichage"
 
 #. module: web
 #. odoo-javascript
@@ -2131,21 +2132,21 @@ msgstr "Dupliquer"
 #: code:addons/web/static/src/views/kanban/kanban_record_quick_create.xml:0
 #, python-format
 msgid "Edit"
-msgstr "Éditer"
+msgstr "Modifier"
 
 #. module: web
 #. odoo-javascript
 #: code:addons/web/static/src/webclient/actions/debug_items.js:0
 #, python-format
 msgid "Edit Action"
-msgstr "Éditer l’action"
+msgstr "Modifier l’action"
 
 #. module: web
 #. odoo-javascript
 #: code:addons/web/static/src/legacy/js/views/kanban/kanban_column.js:0
 #, python-format
 msgid "Edit Column"
-msgstr "Éditer la colonne"
+msgstr "Modifier la colonne"
 
 #. module: web
 #. odoo-javascript
@@ -2153,14 +2154,14 @@ msgstr "Éditer la colonne"
 #: code:addons/web/static/src/views/fields/domain/domain_field.xml:0
 #, python-format
 msgid "Edit Domain"
-msgstr "Éditer le domaine"
+msgstr "Modifier le domaine"
 
 #. module: web
 #. odoo-javascript
 #: code:addons/web/static/src/views/debug_items.js:0
 #, python-format
 msgid "Edit SearchView"
-msgstr "Éditer la vue de recherche"
+msgstr "Modifier la vue de recherche"
 
 #. module: web
 #. odoo-javascript
@@ -2168,28 +2169,28 @@ msgstr "Éditer la vue de recherche"
 #: code:addons/web/static/src/views/kanban/kanban_renderer.xml:0
 #, python-format
 msgid "Edit Stage"
-msgstr "Éditer l'étape"
+msgstr "Modifier l'étape"
 
 #. module: web
 #. odoo-javascript
 #: code:addons/web/static/src/views/debug_items.js:0
 #, python-format
 msgid "Edit View: "
-msgstr "Éditer la vue :"
+msgstr "Modifier la vue :"
 
 #. module: web
 #. odoo-javascript
 #: code:addons/web/static/src/legacy/xml/base.xml:0
 #, python-format
 msgid "Edit record"
-msgstr "Éditer l'enregistrement"
+msgstr "Modifier l'enregistrement"
 
 #. module: web
 #. odoo-javascript
 #: code:addons/web/static/src/views/kanban/kanban_renderer.js:0
 #, python-format
 msgid "Edit: %s"
-msgstr "Éditer : %s"
+msgstr "Modifier : %s"
 
 #. module: web
 #. odoo-javascript
@@ -2651,7 +2652,7 @@ msgstr "Appuyez sur ENTER pour CRÉER"
 #: code:addons/web/static/src/legacy/xml/base.xml:0
 #, python-format
 msgid "Hit ENTER to SAVE"
-msgstr "Appuyez sur ENTER pour SAUVEGARDER"
+msgstr "Appuyez sur ENTER pour ENREGISTRER"
 
 #. module: web
 #. odoo-javascript
@@ -3137,7 +3138,7 @@ msgstr "Many2one"
 #: code:addons/web/static/src/legacy/xml/base.xml:0
 #, python-format
 msgid "Match"
-msgstr "Associer"
+msgstr "Faire correspondre"
 
 #. module: web
 #. odoo-javascript
@@ -3539,7 +3540,7 @@ msgstr "Aucun résultat trouvé"
 #: code:addons/web/static/src/views/relational_model.js:0
 #, python-format
 msgid "No valid record to save"
-msgstr "Aucun enregistrement valide à sauvegarder"
+msgstr "Aucun enregistrement valide à enregistrer"
 
 #. module: web
 #. odoo-javascript
@@ -3902,7 +3903,7 @@ msgstr "Bipeur"
 #. module: web
 #: model:ir.model.fields,field_description:web.field_base_document_layout__paperformat_id
 msgid "Paper format"
-msgstr "Format du papier"
+msgstr "Format de papier"
 
 #. module: web
 #: model:ir.model.fields,field_description:web.field_base_document_layout__partner_id
@@ -4044,7 +4045,7 @@ msgstr "Veuillez choisir un nom pour cette liste de champs"
 #: code:addons/web/static/src/legacy/js/widgets/attach_document.js:0
 #, python-format
 msgid "Please save before attaching a file"
-msgstr "Veuillez sauvegarder avant de joindre un fichier"
+msgstr "Veuillez enregistrer avant de joindre un fichier"
 
 #. module: web
 #. odoo-javascript
@@ -4618,7 +4619,7 @@ msgstr "Sam."
 #: model_terms:ir.ui.view,arch_db:web.view_base_document_layout
 #, python-format
 msgid "Save"
-msgstr "Sauvegarder"
+msgstr "Enregistrer"
 
 #. module: web
 #. odoo-javascript
@@ -4628,7 +4629,7 @@ msgstr "Sauvegarder"
 #: code:addons/web/static/src/views/view_dialogs/form_view_dialog.xml:0
 #, python-format
 msgid "Save & Close"
-msgstr "Sauvegarder & fermer"
+msgstr "Enregistrer & fermer"
 
 #. module: web
 #. odoo-javascript
@@ -4637,7 +4638,7 @@ msgstr "Sauvegarder & fermer"
 #: code:addons/web/static/src/views/view_dialogs/form_view_dialog.xml:0
 #, python-format
 msgid "Save & New"
-msgstr "Sauvegarder & nouveau"
+msgstr "Enregistrer & nouveau"
 
 #. module: web
 #. odoo-javascript
@@ -4672,7 +4673,7 @@ msgstr "Enregistrer comme valeur par défaut"
 #: code:addons/web/static/src/views/form/form_status_indicator/form_status_indicator.xml:0
 #, python-format
 msgid "Save manually"
-msgstr "Sauvegarder manuellement"
+msgstr "Enregistrer manuellement"
 
 #. module: web
 #. odoo-javascript
@@ -4978,6 +4979,13 @@ msgstr "Partager avec tous les utilisateurs"
 
 #. module: web
 #. odoo-javascript
+#: code:addons/web/static/src/webclient/user_menu/user_menu_items.js:0
+#, python-format
+msgid "Shortcuts"
+msgstr "Raccourcis"
+
+#. module: web
+#. odoo-javascript
 #: code:addons/web/static/src/legacy/xml/base.xml:0
 #: code:addons/web/static/src/legacy/xml/base.xml:0
 #: code:addons/web/static/src/views/view_dialogs/export_data_dialog.xml:0
@@ -5223,7 +5231,7 @@ msgstr ""
 #: code:addons/web/static/src/legacy/js/fields/basic_fields.js:0
 #, python-format
 msgid "The field is empty, there's nothing to save."
-msgstr "Le champ est vide, il n'y a rien à sauvegarder !"
+msgstr "Le champ est vide, il n'y a rien à enregistrer !"
 
 #. module: web
 #. odoo-javascript
@@ -5536,7 +5544,7 @@ msgstr ""
 #: code:addons/web/static/src/views/form/form_status_indicator/form_status_indicator.xml:0
 #, python-format
 msgid "Unable to save"
-msgstr "Sauvegarde impossible"
+msgstr "Enregistrement impossible"
 
 #. module: web
 #. odoo-javascript
@@ -5943,7 +5951,7 @@ msgstr "Widget :"
 #: code:addons/web/static/src/webclient/settings_form_view/settings_form_controller.js:0
 #, python-format
 msgid "Would you like to save your changes?"
-msgstr "Souhaitez-vous sauvegarder vos changements ?"
+msgstr "Souhaitez-vous enregistrer vos changements ?"
 
 #. module: web
 #. odoo-javascript
@@ -6055,6 +6063,25 @@ msgstr ""
 
 #. module: web
 #. odoo-javascript
+#: code:addons/web/static/src/views/fields/properties/property_tags.js:0
+#, python-format
+msgid "You need to be able to edit parent first to add property tags"
+msgstr ""
+"Vous devez d'abord pouvoir modifier le parent pour ajouter les étiquettes de"
+" propriété"
+
+#. module: web
+#. odoo-javascript
+#: code:addons/web/static/src/views/fields/properties/properties_field.js:0
+#: code:addons/web/static/src/views/fields/properties/properties_field.js:0
+#, python-format
+msgid "You need to be able to edit parent first to configure property fields"
+msgstr ""
+"Vous devez pouvoir modifier le parent d'abord pour configurer des champs de "
+"propriété"
+
+#. module: web
+#. odoo-javascript
 #: code:addons/web/static/src/legacy/js/views/basic/basic_controller.js:0
 #: code:addons/web/static/src/views/fields/translation_button.js:0
 #, python-format
@@ -6062,7 +6089,7 @@ msgid ""
 "You need to save this new record before editing the translation. Do you want"
 " to proceed?"
 msgstr ""
-"Vous devez sauvegarder ce nouvel enregistrement avant de modifier la "
+"Vous devez enregistrer ce nouvel enregistrement avant de modifier la "
 "traduction. Voulez-vous continuer ?"
 
 #. module: web

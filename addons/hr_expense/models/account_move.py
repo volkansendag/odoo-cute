@@ -46,7 +46,7 @@ class AccountMove(models.Model):
     def _compute_payment_state(self):
         company_paid = self.filtered(lambda m: m.expense_sheet_id.payment_mode == 'company_account')
         for move in company_paid:
-            move.payment_state = move._get_invoice_in_payment_state()
+            move.payment_state = 'paid'
         super(AccountMove, self - company_paid)._compute_payment_state()
 
     @api.depends('expense_sheet_id')
@@ -55,8 +55,8 @@ class AccountMove(models.Model):
         # We want to set the account destination based on the 'payment_mode'.
         super()._compute_needed_terms()
         for move in self:
-            if move.expense_sheet_id:
-                balance = -sum(move.line_ids.filtered(lambda l: l.display_type != 'payment_term').mapped("amount_currency"))
+            if move.expense_sheet_id and move.expense_sheet_id.payment_mode == 'company_account':
+                term_lines = move.line_ids.filtered(lambda l: l.display_type != 'payment_term')
                 move.needed_terms = {
                     frozendict(
                         {
@@ -65,7 +65,8 @@ class AccountMove(models.Model):
                             or fields.Date.context_today(move.expense_sheet_id),
                         }
                     ): {
-                        "balance": balance,
+                        "balance": -sum(term_lines.mapped("balance")),
+                        "amount_currency": -sum(term_lines.mapped("amount_currency")),
                         "name": "",
                         "account_id": move.expense_sheet_id.expense_line_ids[0]._get_expense_account_destination(),
                     }
@@ -83,3 +84,9 @@ class AccountMove(models.Model):
             self.expense_sheet_id.state = 'approve'
             self.expense_sheet_id.account_move_id = False # cannot change to delete='set null' in stable
         return super().unlink()
+
+    def button_draft(self):
+        for line in self.line_ids:
+            if line.expense_id:
+                line.expense_id.sheet_id.write({'state': 'post'})
+        return super().button_draft()
