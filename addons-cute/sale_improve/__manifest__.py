@@ -11,7 +11,7 @@
     'website': 'https://belsis.com.tr',
     'license': 'AGPL-3',
     'depends': [
-        'mail', 'sale',
+        'base', 'mail', 'sale', 'contacts'
     ],
     'data': [
         'data/data.xml',
@@ -19,7 +19,7 @@
         'views/res_partner_source_of_info.xml',
         'views/sale_order_views.xml',
         'views/sale_order_temp_views.xml',
-        'views/sale_order_reports.xml'
+        'views/sale_order_reports.xml',
         'security/res_partner_security.xml',
         'security/ir.model.access.csv',
     ],

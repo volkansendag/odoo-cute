@@ -46,6 +46,6 @@
               name="Bilgi Kaynakları"
               sequence="4"
               groups="base.group_system"
-              parent="contacts.res_partner_menu_config"/>
+              parent="base.menu_administration" />
 
 </odoo>
