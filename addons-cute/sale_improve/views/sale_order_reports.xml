@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Yazdır Menüsüne Yeni Rapor Ekleme -->
+        <record id="action_report_custom_sale_order" model="ir.actions.report">
+            <field name="name">Özel Satış Siparişi</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">sale_improve.report_custom_sale_order_template</field>
+            <field name="report_file">sale_improve.report_custom_sale_order_template</field>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+            <field name="print_report_name">'Özel Sipariş - %s' % (object.name)</field>
+        </record>
+
+        <!-- Rapor Şablonu -->
+        <template id="report_custom_sale_order_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+
+                            <!-- Başlık -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <h2>
+                                        <span>Özel Satış Siparişi</span>
+                                    </h2>
+                                </div>
+                            </div>
+
+                            <!-- Sipariş Bilgileri -->
+                            <div class="row mt32 mb32">
+                                <div class="col-6">
+                                    <strong>Sipariş No:</strong> <span t-field="doc.name"/><br/>
+                                    <strong>Sipariş Tarihi:</strong> <span t-field="doc.date_order" t-options="{'widget': 'date'}"/><br/>
+                                    <strong>Müşteri:</strong> <span t-field="doc.partner_id.name"/><br/>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Satış Temsilcisi:</strong> <span t-field="doc.user_id.name"/><br/>
+                                    <strong>Durum:</strong> <span t-field="doc.state"/><br/>
+                                </div>
+                            </div>
+
+                            <!-- Sipariş Satırları -->
+                            <table class="table table-sm o_main_table">
+                                <thead>
+                                    <tr>
+                                        <th>Ürün</th>
+                                        <th class="text-right">Miktar</th>
+                                        <th class="text-right">Birim Fiyat</th>
+                                        <th class="text-right">Toplam</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.order_line" t-as="line">
+                                        <tr>
+                                            <td>
+                                                <span t-field="line.product_id.name"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-field="line.product_uom_qty"/>
+                                                <span t-field="line.product_uom.name"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-field="line.price_unit"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-field="line.price_subtotal"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+
+                            <!-- Toplam -->
+                            <div class="row">
+                                <div class="col-6">
+                                </div>
+                                <div class="col-6">
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td><strong>Ara Toplam:</strong></td>
+                                            <td class="text-right">
+                                                <span t-field="doc.amount_untaxed"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Vergiler:</strong></td>
+                                            <td class="text-right">
+                                                <span t-field="doc.amount_tax"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="border-black">
+                                            <td><strong>Genel Toplam:</strong></td>
+                                            <td class="text-right">
+                                                <span t-field="doc.amount_total"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

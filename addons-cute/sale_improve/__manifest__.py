@@ -19,6 +19,7 @@
         'views/res_partner_source_of_info.xml',
         'views/sale_order_views.xml',
         'views/sale_order_temp_views.xml',
+        'views/sale_order_reports.xml'
         'security/res_partner_security.xml',
         'security/ir.model.access.csv',
     ],
