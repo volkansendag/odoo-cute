@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Yazdır Menüsüne Yeni Rapor Ekleme -->
+        <record id="action_report_custom_sale_order_no_price" model="ir.actions.report">
+            <field name="name">Özel Satış Siparişi (Fiyatsız)</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">sale_improve.report_custom_sale_order_no_price_template</field>
+            <field name="report_file">sale_improve.report_custom_sale_order_no_price_template</field>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+            <field name="print_report_name">'Sipariş Formu - %s' % (object.name)</field>
+        </record>
+
+        <!-- Rapor Şablonu -->
+        <template id="report_custom_sale_order_no_price_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+
+                            <!-- Başlık -->
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <h2>
+                                        <span>SATIŞ SİPARİŞİ</span>
+                                    </h2>
+                                </div>
+                            </div>
+
+                            <!-- Üst Bilgiler -->
+                            <div class="row mt32 mb32">
+                                <div class="col-6">
+                                    <strong>Sipariş No:</strong> <span t-field="doc.name"/><br/>
+                                    <strong>Sipariş Tarihi:</strong> <span t-field="doc.date_order" t-options="{'widget': 'date'}"/><br/>
+                                    <strong>Teslim Tarihi:</strong>
+                                    <span t-if="doc.commitment_date" t-field="doc.commitment_date" t-options="{'widget': 'date'}"/>
+                                    <span t-if="not doc.commitment_date">Belirtilmemiş</span><br/>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Müşteri:</strong> <span t-field="doc.partner_id.name"/><br/>
+                                    <strong>Müşteri Kodu:</strong> <span t-field="doc.partner_id.ref" t-if="doc.partner_id.ref"/><br/>
+                                    <strong>Telefon:</strong> <span t-field="doc.partner_id.phone" t-if="doc.partner_id.phone"/><br/>
+                                </div>
+                            </div>
+
+                            <!-- Müşteri Adresi -->
+                            <div class="row mb32" t-if="doc.partner_shipping_id">
+                                <div class="col-6">
+                                    <strong>Fatura Adresi:</strong><br/>
+                                    <div t-field="doc.partner_invoice_id"
+                                         t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'/>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Teslimat Adresi:</strong><br/>
+                                    <div t-field="doc.partner_shipping_id"
+                                         t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'/>
+                                </div>
+                            </div>
+
+                            <!-- Satış Temsilcisi ve Şartlar -->
+                            <div class="row mb32">
+                                <div class="col-6">
+                                    <strong>Satış Temsilcisi:</strong> <span t-field="doc.user_id.name"/><br/>
+                                    <strong>Ödeme Koşulları:</strong> <span t-field="doc.payment_term_id.name" t-if="doc.payment_term_id"/><br/>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Durum:</strong>
+                                    <span t-if="doc.state == 'draft'">Teklif</span>
+                                    <span t-if="doc.state == 'sent'">Teklif Gönderildi</span>
+                                    <span t-if="doc.state == 'sale'">Satış Siparişi</span>
+                                    <span t-if="doc.state == 'done'">Kilitli</span>
+                                    <span t-if="doc.state == 'cancel'">İptal Edildi</span><br/>
+                                    <strong>Müşteri Referansı:</strong> <span t-field="doc.client_order_ref" t-if="doc.client_order_ref"/><br/>
+                                </div>
+                            </div>
+
+                            <!-- Sipariş Satırları -->
+                            <table class="table table-sm o_main_table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width: 5%;">#</th>
+                                        <th style="width: 65%;">Ürün Adı</th>
+                                        <th class="text-center" style="width: 15%;">Miktar</th>
+                                        <th class="text-center" style="width: 15%;">Birim</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="line_index" t-value="0"/>
+                                    <t t-foreach="doc.order_line" t-as="line">
+                                        <t t-set="line_index" t-value="line_index + 1"/>
+                                        <tr>
+                                            <td class="text-center">
+                                                <span t-esc="line_index"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.product_id.name"/>
+                                                <span t-if="line.name != line.product_id.name and line.name">
+                                                    <br/><small t-field="line.name"/>
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-field="line.product_uom_qty" t-options="{'widget': 'float', 'precision': 0}"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-field="line.product_uom.name"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+
+                            <!-- Alt Bilgiler -->
+                            <div class="row mt32">
+                                <div class="col-6">
+                                    <!-- Notlar -->
+                                    <div t-if="doc.note">
+                                        <strong>Notlar:</strong><br/>
+                                        <span t-field="doc.note"/>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <!-- Özet Bilgiler -->
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td><strong>Toplam Ürün Çeşidi:</strong></td>
+                                            <td class="text-right">
+                                                <span t-esc="len(doc.order_line)"/> adet
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Toplam Miktar:</strong></td>
+                                            <td class="text-right">
+                                                <t t-set="total_qty" t-value="sum(line.product_uom_qty for line in doc.order_line)"/>
+                                                <span t-esc="int(total_qty)"/> adet
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- İmza Alanları -->
+                            <div class="row mt64">
+                                <div class="col-6 text-center">
+                                    <div style="border-top: 1px solid black; width: 200px; margin: 0 auto; padding-top: 5px;">
+                                        <strong>Müşteri İmzası</strong>
+                                    </div>
+                                </div>
+                                <div class="col-6 text-center">
+                                    <div style="border-top: 1px solid black; width: 200px; margin: 0 auto; padding-top: 5px;">
+                                        <strong>Satış Temsilcisi İmzası</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
